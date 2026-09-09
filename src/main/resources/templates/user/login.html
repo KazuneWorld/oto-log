@@ -10,24 +10,18 @@
 <body>
     <h1>ログインページ</h1>
 
+    <!-- 開発中のログイン省略のためvalueにユーザーをセットしています -->
+    ※開発中のログイン省略のためvalueにユーザーをセット済み
     <form th:action="@{/user/login}" method="post">
 
         <label for="userEmail">メールアドレス</label>
-        <input type="text" id="userEmail" name="userEmail" required>
+        <input type="text" id="userEmail" name="userEmail" value="example1@example.com" required>
 
         <label for="password">パスワード</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" value="1234" required>
 
         <button type="submit">ログイン</button>
         
-    </form>
-
-    <!-- 開発中のログイン省略機能 -->
-     開発中のログイン省略↓
-    <form th:action="@{/user/login}" method="post">
-        <input type="hidden" name="userEmail" value="example1@example.com">
-        <input type="hidden" name="password" value="1234">
-        <button type="submit">ログイン</button>
     </form>
     
 </body>
