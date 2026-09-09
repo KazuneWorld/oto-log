@@ -27,23 +27,23 @@ public class SecurityConfig {
                     // 静的リソースは誰でもアクセス可能
                     .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                     // 誰でもOK画面
-                    .requestMatchers("/", "/users/login","/users/signup","/error").permitAll()
+                    .requestMatchers("/", "/user/login","/user/signup","/error").permitAll()
                     // それ以外はログイン必須
                     .anyRequest().authenticated())
 
             // ログイン設定
             .formLogin(form -> form
-                    .loginPage("/users/login")       // 自作ログインページ(GET)
-                    .loginProcessingUrl("/users/login") // フォームのPOST先(Spring Securityが処理)
-                    .usernameParameter("userid")   // 学籍番号を送るフィールド名
+                    .loginPage("/user/login")       // 自作ログインページ(GET)
+                    .loginProcessingUrl("/user/login") // フォームのPOST先(Spring Securityが処理)
+                    .usernameParameter("userEmail")   // メールアドレスを送るフィールド名
                     .passwordParameter("password")
-                    .defaultSuccessUrl("/", true)    // 成功したらトップ画面へ
+                    .defaultSuccessUrl("/timeline", true)    // 成功したらタイムライン画面へ
                     .permitAll())
 
             // ログアウト設定
             .logout(logout -> logout
                     .logoutUrl("/users/logout")
-                    .logoutSuccessUrl("/")           // ログアウト後もトップ画面へ
+                    .logoutSuccessUrl("/")           // ログアウト後はトップ画面へ
                     .permitAll())
 
             // HTTP Basic 認証は無効化
