@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/login_register.css}"> -->
+</head>
+
+<body>
+    <h1>ログインページ</h1>
+
+    <!-- 開発中のログイン省略のためvalueにユーザーをセットしています -->
+    ※開発中のログイン省略のためvalueにユーザーをセット済み
+    <form th:action="@{/user/login}" method="post">
+
+        <label for="userEmail">メールアドレス</label>
+        <input type="text" id="userEmail" name="userEmail" value="example1@example.com" required>
+
+        <label for="password">パスワード</label>
+        <input type="password" id="password" name="password" value="1234" required>
+
+        <button type="submit">ログイン</button>
+        
+    </form>
+    
+</body>
+
+</html>
