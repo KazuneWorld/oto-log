@@ -5,8 +5,8 @@
     <!-- ユーザーIDでユーザー情報を取得するSQL -->
     <select id="findByUserId" resultType="com.example.webapp.entity.User">
         SELECT
-            user_email    AS userEmail,
-            user_pass     AS userPass
+            user_email         AS userEmail,
+            user_pass_hash     AS userPass
         FROM users
         WHERE user_email = #{userEmail}
     </select>

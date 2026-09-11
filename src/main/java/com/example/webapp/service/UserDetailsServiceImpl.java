@@ -25,7 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(String.valueOf(user.getUserEmail()))
-                .password(user.getUserPass())   // 平文のまま(NoOpPasswordEncoder前提)
+                .password(user.getUserPass())   // ハッシュ化済パスワード
+                .roles("USER")
                 .build();
     }
 
