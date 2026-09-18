@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>投稿</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+</head>
+
+<body>
+    <!-- ヘッダー部分を読み込む -->
+    <div th:replace="~{header :: header}"></div>
+
+    <h1>投稿</h1>
+    <!-- この部分に選択した音楽のジャケ写を表示させる -->
+
+    <h3>気分タグ</h3>
+    <!-- タグ名一覧を表示 -->
+    <form th:action="@{/post/timeline}" method="post">
+        <div th:each="moodtag : ${moodTags}">
+            <input type="radio" name="moodTag" value="${moodtag.moodTagId}" required>
+            <label th:text="${moodtag.tagName}"></label>
+        </div>
+        <input type="submit" value="投稿する">
+    </form>
+
+    <a th:href="@{/timeline}">戻る</a>
+    
+
+    
+</body>
+
+</html>
