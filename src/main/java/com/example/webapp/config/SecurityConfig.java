@@ -22,6 +22,8 @@ public class SecurityConfig {
         http
             // 認可設定
             .authorizeHttpRequests(auth -> auth
+                    //H2コンソールへのアクセスを許可する
+                    .requestMatchers("/h2-console/**").permitAll()
                     // 404などのエラー画面への転送を許可する
                     .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                     // 静的リソースは誰でもアクセス可能
@@ -30,6 +32,10 @@ public class SecurityConfig {
                     .requestMatchers("/", "/user/login","/user/signup","/error").permitAll()
                     // それ以外はログイン必須
                     .anyRequest().authenticated())
+            // H2コンソールのPOST(接続ボタン)がCSRFで弾かれないようにする
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+            // H2コンソールはiframeを使うので、同一オリジンのフレームを許可する
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
 
             // ログイン設定
             .formLogin(form -> form
