@@ -8,7 +8,7 @@
         <a th:href="@{/bookmarks}">ブックマーク</a>
         <a th:href="@{/newpost}">投稿</a>
         <a th:href="@{/notifications}">通知</a>
-        <a th:href="@{#}">マイページ</a>
+        <a th:href="@{/{id}(id=${userInfo.userId})}">マイページ</a>
     </footer>
 </body>
 </html>
