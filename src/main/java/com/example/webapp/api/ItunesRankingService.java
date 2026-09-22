@@ -7,6 +7,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -88,16 +89,17 @@ public class ItunesRankingService {
             return Collections.emptyMap();
         }
 
-        String url = UriComponentsBuilder.fromUriString(LOOKUP_BASE_URL)
+        URI uri = UriComponentsBuilder.fromUriString(LOOKUP_BASE_URL)
                 .queryParam("id", ids)
                 .queryParam("country", "JP")
+                .build()
                 .encode()
-                .toUriString();
+                .toUri();
 
         try {
             // Lookup APIのレスポンス構造は検索APIと同じ({ resultCount, results }) なので、
             // 既存のItunesSearchResponse/ItunesTrackDtoをそのまま再利用できる
-            ItunesSearchResponse response = restTemplate.getForObject(url, ItunesSearchResponse.class);
+            ItunesSearchResponse response = restTemplate.getForObject(uri, ItunesSearchResponse.class);
 
             if (response == null || response.getResults() == null) {
                 return Collections.emptyMap();

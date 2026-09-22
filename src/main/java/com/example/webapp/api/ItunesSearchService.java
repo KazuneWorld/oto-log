@@ -8,6 +8,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,17 +49,18 @@ public class ItunesSearchService {
             return Collections.emptyList();
         }
 
-        String url = UriComponentsBuilder.fromUriString(ITUNES_SEARCH_BASE_URL)
+        URI uri = UriComponentsBuilder.fromUriString(ITUNES_SEARCH_BASE_URL)
                 .queryParam("term", keyword)
                 .queryParam("country", country)
                 .queryParam("media", "music")
                 .queryParam("entity", "song")
                 .queryParam("limit", SEARCH_LIMIT)
+                .build()
                 .encode() // 日本語や記号を含むキーワードをURLエンコードする
-                .toUriString();
+                .toUri();
 
         try {
-            ItunesSearchResponse response = restTemplate.getForObject(url, ItunesSearchResponse.class);
+            ItunesSearchResponse response = restTemplate.getForObject(uri, ItunesSearchResponse.class);
 
             if (response == null || response.getResults() == null) {
                 log.warn("iTunes Search APIから空のレスポンスが返却されました。keyword={}", keyword);
@@ -69,7 +71,7 @@ public class ItunesSearchService {
 
         } catch (RestClientException e) {
             // ネットワークエラーやiTunes側の障害時にアプリ全体を落とさないよう、ここで吸収する
-            log.error("iTunes Search API呼び出しに失敗しました。keyword={}", keyword, e);
+            log.error("iTunes Search API呼び出しに失敗しました。keyword={}, uri={}", keyword, uri, e);
             return Collections.emptyList();
         }
     }
