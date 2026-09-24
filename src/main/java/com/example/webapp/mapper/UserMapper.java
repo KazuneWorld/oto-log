@@ -12,6 +12,7 @@ public interface UserMapper {
 
     // 認証済みユーザーの管理用ユーザーIDでユーザー情報を取得する
     User findById(@Param("userId") String userId);
-    
-    
+
+    //ユーザー情報をDBに登録する
+    void insert(User user);  
 }

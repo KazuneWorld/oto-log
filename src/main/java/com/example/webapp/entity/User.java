@@ -13,6 +13,7 @@ public class User {
     private String userEmail;
     private String userLoginId;
     private String userPass;
-
+    private String userPassHash;
+    private String friendCode;
     
 }
