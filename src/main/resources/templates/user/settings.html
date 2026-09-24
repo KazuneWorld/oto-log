@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--html xmlns:th="http://www.thymeleaf.org"-->
+<html xmlns:th="http://www.thymeleaf.org">
 <html>
 
 <head>
@@ -13,16 +13,17 @@
     <div th:replace="~{header :: header}"></div>
 
     <h1>設定</h1>
-    <a href="settings/account">ユーザー情報変更</a>
+    <a th:href="@{/settings/account}">ユーザー情報変更</a>
 
-    <!-- 色は仮 -->
+    <!-- ⚠️余裕があれば実装・色は仮 -->
+    <!-- カラーテーマにAppleMusic/Spotify/YouTube風とかあったら面白そう！ -->
     <p>カラーテーマ</p>
-    <p><input type="radio" id="color" name="color" value="light">ライト</p>
-    <p><input type="radio" id="color" name="color" value="dark">ダーク</p>
-    <p><input type="radio" id="color" name="color" value="navy">ネイビー</p>
+    <p><input type="radio" id="color" name="color" value="light" checked>ライト</p>
+    <p><input type="radio" id="color" name="color" value="dark" disabled>ダーク</p>
+    <p><input type="radio" id="color" name="color" value="navy" disabled>ネイビー</p>
     <button type="submit">変更</button>
 
-	<a th:href="@{/}">ログアウト</a>
+	<a th:href="@{#}">ログアウト</a>
 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>

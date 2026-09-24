@@ -1,49 +1,42 @@
 <!DOCTYPE html>
-<!--html xmlns:th="http://www.thymeleaf.org"-->
+<html xmlns:th="http://www.thymeleaf.org">
 <html>
 
 <head>
     <meta charset="UTF-8">
     <title>設定</title>
-    <link rel="stylesheet" th:href="@{/css/setting-accounts.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/setting-accounts.css}"> -->
 </head>
 <body>
 
-    <!-- ヘッダー部分を読み込む -->
-    <div th:replace="~{header :: header}"></div>
+    <!--機能実装担当者さんへ
+    
+        ・ニックネームを一番最初に移動させて。
+        ・その次に、ログイン用IDを変更するテキストボックスも必要。
+        ・現在のパスワードを入力させるテキストボックスも必要。
+
+        ※パスワード以外は現在設定中の値を表示させるようにしてね。
+    
+        終わったらこれ消してね
+    -->
 
     <h1>ユーザー情報変更</h1>
-    <p>変更する情報以外も入力してください（仮）</p>
     <form th:action="@{/user/settings}" method="post">
         <label for="email">メールアドレス:</label>
-        <input type="email" id="email" name="email">
+        <input type="email" id="email" name="email" required>
         <!-- th:value="${user.email}" required-->
         <label for="password">パスワード:</label>
-        <input type="password" id="password" name="password">
+        <input type="password" id="password" name="password" required>
         <!-- th:value="${user.password}" required-->
         <label for="password-confirm">パスワード（確認）</label>
         <input type="password" id="password-confirm" name="password-confirm" required>
-        <p id="message"></p>
         <label for="username">ニックネーム:</label>
-        <input type="text" id="username" name="username">
+        <input type="text" id="username" name="username" required>
         <!-- th:value="${user.username}" required-->
         <button type="submit">変更</button>
     </form>
 
-    <script>
-        const password = document.getElementById("password");
-        const passwordConfirm = document.getElementById("password-confirm");
-        const message = document.getElementById("message");
-        
-        passwordConfirm.addEventListener("input", function () {
-        if (password.value === passwordConfirm.value) {
-            message.textContent = "パスワードが一致しています";
-            message.style.color = "green";
-        } else {
-            message.textContent = "パスワードが一致していません";
-            message.style.color = "red";
-        }
-        });
-</script>
+    <!-- ※パスワードの検証はjsではなくサーバー側で行う（unitradeと同じ）-->
+     
 </body>
 </html>
