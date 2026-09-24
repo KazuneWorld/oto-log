@@ -30,7 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(String.valueOf(user.getUserId()))
-                .password(user.getUserPass())   // ハッシュ化済パスワード
+                .password(user.getUserPassHash())   // ハッシュ化済パスワード
                 .roles("USER")
                 .build();
     }
