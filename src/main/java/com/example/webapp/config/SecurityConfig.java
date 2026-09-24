@@ -44,6 +44,7 @@ public class SecurityConfig {
                     .usernameParameter("userEmail")   // メールアドレスを送るフィールド名
                     .passwordParameter("password")
                     .defaultSuccessUrl("/timeline", true)    // 成功したらタイムライン画面へ
+                    .failureUrl("/user/login?error")     //エラー表示
                     .permitAll())
 
             // ログアウト設定
