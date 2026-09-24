@@ -1,11 +1,19 @@
 package com.example.webapp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.webapp.entity.MoodTag;
 import com.example.webapp.mapper.PostMapper;
+
+import org.springframework.ui.Model;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestParam;
 
 // UserController
 @Controller
@@ -33,8 +41,8 @@ public class UserController {
 
     //投稿後のタイムライン画面
     @PostMapping("/timeline")
-    public String postTimeline(){
-        
+    public String postTimeline(@RequestParam("userId") String userId, @RequestParam("moodTagId") int moodTagId) {
+        postMapper.insertPostId(userId, moodTagId);
         return "post/timeline";
     }
     

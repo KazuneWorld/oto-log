@@ -9,10 +9,10 @@ import java.util.List;
 @Mapper
 public interface PostMapper {
     
-    // タグIDでタグ情報を取得する
-    List<MoodTag> findByTagId();
+    // すべてのタグ情報を取得する
+    List<MoodTag> allTagId();
 
     //投稿する
-    void insertPostId(@Param ("userId") String userId, @Param ("songId") int songId, @Param("moodTagId") int moodTagId);
+    void insertPostId(@Param ("userId") String userId, @Param("moodTagId") int moodTagId);
 
 }

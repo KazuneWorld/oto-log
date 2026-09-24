@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.webapp.mapper.PostMapper">
 
-    <!-- タグIDでタグ情報を取得するSQL -->
-    <select id="findByTagId" resultType="com.example.webapp.entity.MoodTag">
+    <!-- すべてのタグ情報を取得するSQL -->
+    <select id="allTagId" resultType="com.example.webapp.entity.MoodTag">
         SELECT
             mood_tag_id         AS moodTagId,
             tag_name            AS tagName
@@ -11,12 +11,26 @@
         ORDER BY moodTagId
     </select>
 
+    <!-- 音楽IDで音楽情報を取得するSQL -->
+    <select id="findBySongId" resultType="com.example.webapp.entity.Song">
+        SELECT
+            song_id         AS songId,
+            track_id          AS trackId,
+            track_name        AS trackName,
+            artist_name       AS artistName,
+            artwork_url        AS artworkUrl,
+            preview_url        AS previewUrl,
+            apple_music_url     AS appleMusicUrl
+        FROM songs
+        WHERE songId= #{songId}
+    </select>
+
     <!-- 投稿するSQL -->
     <insert id="insertPostId" parameterType="com.example.webapp.entity.Post">
         INSERT INTO posts
             (post_id, user_id, song_id, mood_tag_id, posted_at)
         VALUES
-            ('', #{userId}, #{songId}, #{moodTagId}, now());
+            ('123456AbCdEf', #{userId}, Null, #{moodTagId}, now());
             
     </insert>
 

@@ -87,7 +87,7 @@ CREATE TABLE friends (
 CREATE TABLE posts (
     post_id      VARCHAR(12)  NOT NULL,                    -- PK, 12桁ランダム英数字
     user_id      VARCHAR(12)  NOT NULL,                    -- 投稿者
-    song_id      INT          NOT NULL,                    -- 投稿された曲
+    song_id      INT          ,                    -- 投稿された曲
     mood_tag_id  INT          NOT NULL,                    -- 気分タグ
     posted_at    DATETIME     NOT NULL,                    -- 投稿日時
 

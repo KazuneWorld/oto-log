@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.webapp.entity.MoodTag;
 import com.example.webapp.mapper.PostMapper;
 import org.springframework.ui.Model;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 
 //PostController
@@ -20,11 +23,11 @@ public class PostController {
     
     //投稿の画面
     @GetMapping("/newpost")
-    public String newPost(Model model) {
-        System.out.println(postMapper.findByTagId());
-        List<MoodTag> moodTags = postMapper.findByTagId();
+    public String newPost(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        String userId = userDetails.getUsername();
+        List<MoodTag> moodTags = postMapper.allTagId();
+        model.addAttribute("userId", userId);
         model.addAttribute("moodTags", moodTags);
-        System.out.println(moodTags);
         return "post/newpost";
     }
 }
