@@ -11,10 +11,9 @@
     <h1>ログインページ</h1>
 
     <!-- 開発中のログイン省略のためvalueにユーザーをセットしています -->
-    ※開発中のログイン省略のためvalueにユーザーをセット済み
     <form th:action="@{/user/login}" method="post">
 
-        <label for="userEmail">メールアドレス</label>
+        <label for="userEmail">メールアドレスまたはログインID</label>
         <input type="text" id="userEmail" name="userEmail" value="example1@example.com" required>
 
         <label for="password">パスワード</label>

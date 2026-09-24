@@ -13,7 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 // UserController
 @Controller
 public class UserController {
-    
+
+
     //最初の画面
     @GetMapping("/")
     public String index() {

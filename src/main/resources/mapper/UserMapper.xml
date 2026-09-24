@@ -2,13 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.webapp.mapper.UserMapper">
 
-    <!-- ユーザーIDでユーザー情報を取得するSQL -->
-    <select id="findByUserId" resultType="com.example.webapp.entity.User">
+    <!-- update ユーザー情報変更 -->
+    <update id="update" parameterType="com.example.webapp.entity.User">
+        UPDATE users
+        SET 
+            user_email = #{userEmail},
+            user_login_id = #{userLoginId},
+            user_pass_hash = #{userPass},
+            user_icon = #{userIcon},
+            user_nickname = #{userNickname}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- メールアドレスかログイン用ユーザーIDでユーザー情報を取得するSQL -->
+    <select id="findByLoginValue" resultType="com.example.webapp.entity.User">
         SELECT
+            user_id            AS userId,
             user_email         AS userEmail,
+            user_login_id      AS userLoginId,
             user_pass_hash     AS userPass
         FROM users
-        WHERE user_email = #{userEmail}
+        WHERE user_email = #{loginValue} OR user_login_id = #{loginValue}
+    </select>
+
+    <!-- （ユーザー情報変更・フッター用）ログイン中ユーザーの管理用ユーザーIDで、ユーザー情報を取得するSQL -->
+    <select id="findById" resultType="com.example.webapp.entity.User">
+        SELECT
+            user_id            AS userId,
+            user_icon          AS userIcon,
+            user_nickname      AS userNickname,
+            user_email         AS userEmail,
+            user_login_id      AS userLoginId,
+            user_pass_hash     AS userPass
+        FROM users
+        WHERE user_id = #{userId}
     </select>
 
     <!-- ユーザー登録 -->
