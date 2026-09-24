@@ -12,4 +12,7 @@ public interface PostMapper {
     // タグIDでタグ情報を取得する
     List<MoodTag> findByTagId();
 
+    //投稿する
+    void insertPostId(@Param ("userId") String userId, @Param ("songId") int songId, @Param("moodTagId") int moodTagId);
+
 }

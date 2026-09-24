@@ -11,4 +11,13 @@
         ORDER BY moodTagId
     </select>
 
+    <!-- 投稿するSQL -->
+    <insert id="insertPostId" parameterType="com.example.webapp.entity.Post">
+        INSERT INTO posts
+            (post_id, user_id, song_id, mood_tag_id, posted_at)
+        VALUES
+            ('', #{userId}, #{songId}, #{moodTagId}, now());
+            
+    </insert>
+
 </mapper>
