@@ -7,8 +7,11 @@ import com.example.webapp.entity.User;
 
 @Mapper
 public interface UserMapper {
-    // ログイン時、
-    User findByUserId(@Param("userEmail") String userEmail);
+    // メールアドレスまたはログイン用ユーザーIDでユーザー情報を取得する
+    User findByLoginValue(@Param("loginValue") String loginValue);
+
+    // 認証済みユーザーの管理用ユーザーIDでユーザー情報を取得する
+    User findById(@Param("userId") String userId);
     
     
 }

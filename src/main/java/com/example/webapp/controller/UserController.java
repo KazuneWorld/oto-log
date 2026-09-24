@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 // UserController
 @Controller
 public class UserController {
-    
+
+
     //最初の画面
     @GetMapping("/")
     public String index() {
