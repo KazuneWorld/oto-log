@@ -11,4 +11,31 @@
         WHERE user_email = #{userEmail}
     </select>
 
+    <!-- ユーザー登録 -->
+    <insert id="insert" parameterType="com.example.webapp.entity.User">
+
+        INSERT INTO users
+            (
+            user_id,
+            user_login_id,
+            friend_code,
+            user_email,
+            user_pass_hash,
+            user_nickname,
+            user_icon
+        )
+        VALUES
+            (
+            #{userId},
+            #{userLoginId},
+            #{friendCode},
+            #{userEmail},
+            #{userPassHash},
+            #{userNickname},
+            #{userIcon}
+         )
+
+    </insert>
+
+
 </mapper>
