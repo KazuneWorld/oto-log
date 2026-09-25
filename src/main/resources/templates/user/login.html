@@ -10,6 +10,11 @@
 <body>
     <h1>ログインページ</h1>
 
+    <!-- ログイン失敗時のエラーメッセージ -->
+    <p th:if="${param.error}" style="color: red;">
+        メールアドレス（またはログインID）かパスワードが正しくありません。
+    </p>
+
     <!-- 開発中のログイン省略のためvalueにユーザーをセットしています -->
     <form th:action="@{/user/login}" method="post">
 
