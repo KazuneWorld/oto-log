@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import com.example.webapp.entity.User;
 import com.example.webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 
 // UserController
 @Controller
@@ -46,6 +48,7 @@ public class UserController {
     public String timeline() {
         return "post/timeline";
     }
+
 
     //会員登録フォームを表示
     @GetMapping("/user/signup")
@@ -81,4 +84,18 @@ public class UserController {
 
         return "redirect:/timeline";
     }
+
+    // 設定画面
+    @GetMapping("/settings")
+    public String settings() {
+        return "user/settings";
+    }
+
+    //ユーザー情報変更画面
+    @GetMapping("/settings/account")
+    public String settingAccounts() {
+        return "user/setting-accounts";
+    }
+    
 }
+
