@@ -25,24 +25,24 @@ public class UserService {
 
     // ユーザー登録
     public void insert(User user) {
-        //ランダムにユーザーIDを生成
-        user.setUserId(generateUserId());
-        //ランダムにフレンドコードを生成
-        user.setFriendCode(generateFriendCode());
+        //ランダムにユーザーIDを生成(重複チェック付き)
+        user.setUserId(generateUniqueUserId());
+        //ランダムにフレンドコードを生成(重複チェック付き)
+        user.setFriendCode(generateUniqueFriendCode());
         //パスワードをハッシュ化
         user.setUserPassHash(passwordEncoder.encode(user.getUserPass()));
         //ユーザー情報をDBに登録
         userMapper.insert(user);
     }
 
-    //ランダムなユーザーIDを生成(12桁の英数字)
-    private String generateUserId() {
-        return generateRandomString(USER_ID_LENGTH);
+    // メールアドレスが既に使われているか確認する
+    public boolean isEmailTaken(String userEmail) {
+        return userMapper.existsByEmail(userEmail);
     }
 
-    //ランダムなフレンドコードを生成(8桁の英数字)
-    private String generateFriendCode() {
-        return generateRandomString(FRIEND_CODE_LENGTH);
+    // ログイン用ユーザーIDが既に使われているか確認する
+    public boolean isLoginIdTaken(String userLoginId) {
+        return userMapper.existsByLoginId(userLoginId);
     }
 
     //指定した桁数のランダムな文字列を生成
@@ -52,5 +52,23 @@ public class UserService {
             sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return sb.toString();
+    }
+
+    //重複しないユーザーIDを生成
+    private String generateUniqueUserId() {
+        String userId;
+        do {
+            userId = generateRandomString(USER_ID_LENGTH);
+        } while (userMapper.existsByUserId(userId));
+        return userId;
+    }
+
+    //重複しないフレンドコードを生成
+    private String generateUniqueFriendCode() {
+        String friendCode;
+        do {
+            friendCode = generateRandomString(FRIEND_CODE_LENGTH);
+        } while (userMapper.existsByFriendCode(friendCode));
+        return friendCode;
     }
 }

@@ -20,7 +20,7 @@
             user_id            AS userId,
             user_email         AS userEmail,
             user_login_id      AS userLoginId,
-            user_pass_hash     AS userPass
+            user_pass_hash     AS userPassHash
         FROM users
         WHERE user_email = #{loginValue} OR user_login_id = #{loginValue}
     </select>
@@ -33,7 +33,7 @@
             user_nickname      AS userNickname,
             user_email         AS userEmail,
             user_login_id      AS userLoginId,
-            user_pass_hash     AS userPass
+            user_pass_hash     AS userPassHash
         FROM users
         WHERE user_id = #{userId}
     </select>
@@ -64,5 +64,32 @@
 
     </insert>
 
+    <!-- ユーザーIDの重複チェック -->
+    <select id="existsByUserId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM users WHERE user_id = #{userId}
+        )
+    </select>
+
+    <!-- フレンドコードの重複チェック -->
+    <select id="existsByFriendCode" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM users WHERE friend_code = #{friendCode}
+        )
+    </select>
+
+    <!-- メールアドレスの重複チェック -->
+    <select id="existsByEmail" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM users WHERE user_email = #{userEmail}
+        )
+    </select>
+
+    <!-- ログイン用ユーザーIDの重複チェック -->
+    <select id="existsByLoginId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM users WHERE user_login_id = #{userLoginId}
+        )
+    </select>
 
 </mapper>

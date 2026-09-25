@@ -1,21 +1,15 @@
 package com.example.webapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.webapp.entity.User;
+import com.example.webapp.service.AuthService;
 import com.example.webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +23,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AuthService authService;
 
     //最初の画面
     @GetMapping("/")
@@ -59,10 +53,23 @@ public class UserController {
     //会員登録処理
     @PostMapping("/user/signup")
     public String signup(@ModelAttribute User user, @RequestParam String userPassConfirm,
-                          HttpServletRequest request) {
+                          HttpServletRequest request, Model model) {
 
         //パスワードと確認用パスワードが一致しているかチェック
         if(!user.getUserPass().equals(userPassConfirm)){
+            model.addAttribute("errorMessage", "パスワードが一致しません。");
+            return "user/signup";
+        }
+
+        //メールアドレスの重複チェック
+        if(userService.isEmailTaken(user.getUserEmail())){
+            model.addAttribute("errorMessage", "このメールアドレスは既に使用されています。");
+            return "user/signup";
+        }
+
+        //ログイン用ユーザーIDの重複チェック
+        if(userService.isLoginIdTaken(user.getUserLoginId())){
+            model.addAttribute("errorMessage", "このログインIDは既に使用されています。");
             return "user/signup";
         }
 
@@ -70,17 +77,7 @@ public class UserController {
         userService.insert(user);
 
         //登録したユーザーで自動ログイン状態にする
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUserEmail());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
-
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-
-        //セッションに明示的に保存する(これが無いと次のリクエストで認証情報が消える)
-        request.getSession().setAttribute(
-                HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
+        authService.login(user, request);
 
         return "redirect:/timeline";
     }
@@ -96,6 +93,5 @@ public class UserController {
     public String settingAccounts() {
         return "user/setting-accounts";
     }
-    
-}
 
+}

@@ -9,6 +9,8 @@
 <body>
     <h1>会員登録</h1>
 
+    <p th:if="${errorMessage}" style="color: red;" th:text="${errorMessage}"></p>
+    
     <form th:action="@{/user/signup}" th:object="${user}" method="post">
 
         <div>
