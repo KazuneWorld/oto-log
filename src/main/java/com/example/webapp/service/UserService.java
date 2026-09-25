@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int USER_ID_LENGTH = 12;
     private static final int FRIEND_CODE_LENGTH = 8;
     private static final SecureRandom random = new SecureRandom();
