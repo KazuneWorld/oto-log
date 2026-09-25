@@ -13,6 +13,6 @@ public interface PostMapper {
     List<MoodTag> allTagId();
 
     //投稿する
-    void insertPostId(@Param ("userId") String userId, @Param("moodTagId") int moodTagId);
+    void insertPostId(@Param("postId") String postId, @Param ("userId") String userId, @Param("moodTagId") int moodTagId);
 
 }

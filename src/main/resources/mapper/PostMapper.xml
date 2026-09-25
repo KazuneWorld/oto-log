@@ -30,7 +30,7 @@
         INSERT INTO posts
             (post_id, user_id, song_id, mood_tag_id, posted_at)
         VALUES
-            ('123456AbCdEf', #{userId}, Null, #{moodTagId}, now());
+            (#{postId}, #{userId}, 1, #{moodTagId}, now());
             
     </insert>
 

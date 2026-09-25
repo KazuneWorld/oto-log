@@ -15,13 +15,16 @@ import com.example.webapp.mapper.PostMapper;
 import org.springframework.ui.Model;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import com.example.webapp.service.PostService;
 
 // UserController
 @Controller
 public class UserController {
     @Autowired
     private PostMapper postMapper;
+
+    @Autowired 
+    private PostService postService;
 
     //最初の画面
     @GetMapping("/")
@@ -45,9 +48,9 @@ public class UserController {
     //投稿後のタイムライン画面
     @PostMapping("/timeline")
     public String postTimeline(@RequestParam("userId") String userId, @RequestParam("moodTagId") int moodTagId) {
-        postMapper.insertPostId(userId, moodTagId);
+        String postId = postService.generateRandomString(12);
+        postMapper.insertPostId(postId, userId, moodTagId);
         return "post/timeline";
-
     }
 
     // 設定画面
