@@ -42,6 +42,6 @@ public class PostController {
         String userId = authentication.getName();
         String postId = postService.generateRandomString(12);
         postMapper.insertPostId(postId, userId, moodTagId);
-        return "redirect:/post/timeline";
+        return "redirect:/timeline";
     }
 }
