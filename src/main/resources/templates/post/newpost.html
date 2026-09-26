@@ -17,7 +17,6 @@
     <h3>気分タグ</h3>
     <!-- タグ名一覧を表示 -->
     <form th:action="@{/timeline}" method="post">
-        <input type="hidden" name="userId" th:value="${userId}">
         <div th:each="moodtag : ${moodTags}">
             <input type="radio" name="moodTagId" th:value="${moodtag.moodTagId}" required>
             <label th:text="${moodtag.tagName}"></label>

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Song {
 
-    private String songId;
+    private int songId;
     private String trackId;
     private String trackName;
     private String artistName;

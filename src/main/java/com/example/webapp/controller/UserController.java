@@ -3,6 +3,7 @@ package com.example.webapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,15 +42,6 @@ public class UserController {
     //タイムライン画面
     @GetMapping("/timeline")
     public String timeline() {
-        return "post/timeline";
-    }
-
-
-    //投稿後のタイムライン画面
-    @PostMapping("/timeline")
-    public String postTimeline(@RequestParam("userId") String userId, @RequestParam("moodTagId") int moodTagId) {
-        String postId = postService.generateRandomString(12);
-        postMapper.insertPostId(postId, userId, moodTagId);
         return "post/timeline";
     }
 

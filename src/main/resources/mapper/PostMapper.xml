@@ -3,7 +3,7 @@
 <mapper namespace="com.example.webapp.mapper.PostMapper">
 
     <!-- すべてのタグ情報を取得するSQL -->
-    <select id="allTagId" resultType="com.example.webapp.entity.MoodTag">
+    <select id="findAllTagId" resultType="com.example.webapp.entity.MoodTag">
         SELECT
             mood_tag_id         AS moodTagId,
             tag_name            AS tagName
@@ -22,7 +22,7 @@
             preview_url        AS previewUrl,
             apple_music_url     AS appleMusicUrl
         FROM songs
-        WHERE songId= #{songId}
+        WHERE song_id = #{songId}
     </select>
 
     <!-- 投稿するSQL -->
