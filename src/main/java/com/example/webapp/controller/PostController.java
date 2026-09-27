@@ -31,6 +31,7 @@ public class PostController {
     //投稿の画面
     @GetMapping("/newpost")
     public String newPost(Model model) {
+        // 気分タグの取得
         List<MoodTag> moodTags = postMapper.findAllTagId();
         model.addAttribute("moodTags", moodTags);
         return "post/newpost";
