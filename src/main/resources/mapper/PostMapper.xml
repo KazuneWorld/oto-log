@@ -31,7 +31,13 @@
             (post_id, user_id, song_id, mood_tag_id, posted_at)
         VALUES
             (#{postId}, #{userId}, 1, #{moodTagId}, now());
-            
     </insert>
+
+    <!-- 投稿IDの重複チェック -->
+    <select id="existsByPostId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM posts WHERE post_id = #{postId}
+        )
+    </select>
 
 </mapper>

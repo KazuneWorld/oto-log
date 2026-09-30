@@ -15,4 +15,7 @@ public interface PostMapper {
     //投稿する
     void insertPostId(@Param("postId") String postId, @Param ("userId") String userId, @Param("moodTagId") int moodTagId);
 
+    //投稿ID重複チェック
+    boolean existsByPostId(@Param("postId") String postId);
+
 }
