@@ -30,6 +30,7 @@ CREATE TABLE users (
     user_icon       VARCHAR(255) NULL,                     -- ローカル上のファイル名を保存
 
     PRIMARY KEY (user_id),
+    UNIQUE KEY uq_users_user_id (user_id),
     UNIQUE KEY uq_users_login_id (user_login_id),
     UNIQUE KEY uq_users_friend_code (friend_code),
     UNIQUE KEY uq_users_email (user_email)
