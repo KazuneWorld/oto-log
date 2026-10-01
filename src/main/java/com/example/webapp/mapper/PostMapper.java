@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.webapp.entity.MoodTag;
+import com.example.webapp.entity.Post;
+
 import java.util.List;
 
 @Mapper
@@ -17,5 +19,8 @@ public interface PostMapper {
 
     //投稿ID重複チェック
     boolean existsByPostId(@Param("postId") String postId);
+
+    //フレンド状態のすべての投稿情報を取得する
+    List<Post> findAllFriendPostId();
 
 }

@@ -40,4 +40,28 @@
         )
     </select>
 
+    <!-- フレンド状態のすべての投稿情報を取得するSQL -->
+    <select id="findAllFriendPostId" resultType="com.example.webapp.entity.Post">
+        SELECT
+            p.post_id        AS postId,
+            p.user_id        AS userId,
+            p.song_id        AS songId,
+            p.mood_tag_id    AS moodTagId,
+            p.posted_at      AS postedAt,
+            u.user_nickname  AS userNickname,
+            u.user_icon      AS userIcon,
+            s.track_id       AS trackId,
+            s.track_name     AS trackName,
+            s.artwork_url    AS artworkUrl,
+            s.preview_url    AS previewUrl,
+            s.apple_music_url AS appleMusicUrl,
+            m.tag_name       AS tagName
+        FROM posts p
+        JOIN users u ON p.user_id = u.user_id
+        JOIN songs s ON p.song_id = s.song_id
+        JOIN mood_tags m ON p.mood_tag_id = m.mood_tag_id
+        JOIN friends f ON u.user_id = f.friend_id
+        WHERE f.friend_status = 1
+        ORDER BY p.posted_at DESC
+
 </mapper>

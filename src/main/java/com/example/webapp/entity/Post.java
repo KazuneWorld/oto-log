@@ -18,6 +18,7 @@ public class Post {
     private int songId;
     private int moodTagId;
     private  Date postedAt;
+    
 
     
 }
