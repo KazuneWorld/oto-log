@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.PostMapper">
+
+    <!-- すべてのタグ情報を取得するSQL -->
+    <select id="findAllTagId" resultType="com.example.webapp.entity.MoodTag">
+        SELECT
+            mood_tag_id         AS moodTagId,
+            tag_name            AS tagName
+        FROM mood_tags
+        ORDER BY moodTagId
+    </select>
+
+    <!-- 音楽IDで音楽情報を取得するSQL -->
+    <select id="findBySongId" resultType="com.example.webapp.entity.Song">
+        SELECT
+            song_id         AS songId,
+            track_id          AS trackId,
+            track_name        AS trackName,
+            artist_name       AS artistName,
+            artwork_url        AS artworkUrl,
+            preview_url        AS previewUrl,
+            apple_music_url     AS appleMusicUrl
+        FROM songs
+        WHERE song_id = #{songId}
+    </select>
+
+    <!-- 投稿するSQL -->
+    <insert id="insertPostId" parameterType="com.example.webapp.entity.Post">
+        INSERT INTO posts
+            (post_id, user_id, song_id, mood_tag_id, posted_at)
+        VALUES
+            (#{postId}, #{userId}, 1, #{moodTagId}, now());
+    </insert>
+
+    <!-- 投稿IDの重複チェック -->
+    <select id="existsByPostId" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM posts WHERE post_id = #{postId}
+        )
+    </select>
+
+</mapper>
