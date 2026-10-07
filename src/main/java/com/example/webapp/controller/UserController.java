@@ -37,7 +37,7 @@ public class UserController {
             return "redirect:/timeline";
         }
         
-        return "index";
+        return "user/index";
     }
 
     //ログイン画面(表示のみ、認証処理はSpring Securityが自動でやる)

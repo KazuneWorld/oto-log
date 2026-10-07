@@ -39,7 +39,8 @@ public class SecurityConfig {
 
             // ログイン設定
             .formLogin(form -> form
-                    .loginPage("/user/login")       // 自作ログインページ(GET)
+                    .loginPage("/")
+                    //.loginPage("/user/login")       // 自作ログインページ(GET)
                     .loginProcessingUrl("/user/login") // フォームのPOST先(Spring Securityが処理)
                     .usernameParameter("userEmail")   // メールアドレスを送るフィールド名
                     .passwordParameter("password")
