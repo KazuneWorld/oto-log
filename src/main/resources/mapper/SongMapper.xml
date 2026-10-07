@@ -16,9 +16,9 @@
         WHERE song_id = #{songId}
     </select>
 
-    <!-- 音楽情報を登録するSQL -->
+    <!-- 音楽情報を登録するSQL（既に同じ曲があれば登録スキップ） -->
     <insert id="insertSong" parameterType="com.example.webapp.entity.Song" useGeneratedKeys="true" keyProperty="songId">
-        INSERT INTO songs
+        INSERT IGNORE INTO songs
             (song_id, track_id, track_name, artist_name, artwork_url, preview_url, apple_music_url)
         VALUES
             (#{songId}, #{trackId}, #{trackName}, #{artistName}, #{artworkUrl}, #{previewUrl}, #{appleMusicUrl});
