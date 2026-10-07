@@ -41,7 +41,7 @@ public class UserController {
     }
 
     //ログイン画面(表示のみ、認証処理はSpring Securityが自動でやる)
-    // ログイン画面（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
+    //（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/login")
     public String login(HttpServletRequest request) {
          //もしすでにログイン中（Spring Securityの認証情報がある）かチェック
@@ -60,8 +60,7 @@ public class UserController {
     }
 
 
-    //会員登録フォームを表示
-    // 会員登録フォーム（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
+    // 会員登録フォームを表示（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/signup")
     public String signupForm(@ModelAttribute User user, HttpServletRequest request) {
         // すでにログイン状態かチェック
