@@ -23,7 +23,9 @@
     <p><input type="radio" id="color" name="color" value="navy" disabled>ネイビー</p>
     <button type="submit">変更</button>
 
-	<a th:href="@{#}">ログアウト</a>
+    <form th:action="@{/users/logout}" method="post">
+        <button type="submit" th:onclick="return confirm('ログアウトしますか？');">ログアウト</button>
+    </form>
 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>
