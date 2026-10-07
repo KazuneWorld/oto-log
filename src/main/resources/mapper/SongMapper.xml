@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.SongMapper">
+
+    <!-- 音楽IDで音楽情報を取得するSQL -->
+    <select id="findBySongId" resultType="com.example.webapp.entity.Song">
+        SELECT
+            song_id         AS songId,
+            track_id          AS trackId,
+            track_name        AS trackName,
+            artist_name       AS artistName,
+            artwork_url        AS artworkUrl,
+            preview_url        AS previewUrl,
+            apple_music_url     AS appleMusicUrl
+        FROM songs
+        WHERE song_id = #{songId}
+    </select>
+
+    <!-- 音楽情報を登録するSQL -->
+    <insert id="insertSong" parameterType="com.example.webapp.entity.Song">
+        INSERT INTO songs
+            (song_id, track_id, track_name, artist_name, artwork_url, preview_url, apple_music_url)
+        VALUES
+            (#{songId}, #{trackId}, #{trackName}, #{artistName}, #{artworkUrl}, #{previewUrl}, #{appleMusicUrl});
+    </insert>
+
+</mapper>

@@ -11,20 +11,6 @@
         ORDER BY moodTagId
     </select>
 
-    <!-- 音楽IDで音楽情報を取得するSQL -->
-    <select id="findBySongId" resultType="com.example.webapp.entity.Song">
-        SELECT
-            song_id         AS songId,
-            track_id          AS trackId,
-            track_name        AS trackName,
-            artist_name       AS artistName,
-            artwork_url        AS artworkUrl,
-            preview_url        AS previewUrl,
-            apple_music_url     AS appleMusicUrl
-        FROM songs
-        WHERE song_id = #{songId}
-    </select>
-
     <!-- 投稿するSQL -->
     <insert id="insertPost" parameterType="com.example.webapp.entity.Post">
         INSERT INTO posts
