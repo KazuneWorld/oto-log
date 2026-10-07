@@ -46,9 +46,9 @@ public class PostController {
 
     //投稿後のタイムライン画面
     @PostMapping("/timeline")
-    public String postTimeline(Authentication authentication, @RequestParam("moodTagId") int moodTagId, @ModelAttribute Post post) {
+    public String postTimeline(Authentication authentication, @ModelAttribute Post post) {
         String userId = authentication.getName();
-        postService.insertPost(userId, moodTagId);
+        postService.insertPost(userId, post);
         return "redirect:/timeline";
     }
 }

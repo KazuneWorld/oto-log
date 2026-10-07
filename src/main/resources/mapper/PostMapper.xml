@@ -26,11 +26,11 @@
     </select>
 
     <!-- 投稿するSQL -->
-    <insert id="insertPostId" parameterType="com.example.webapp.entity.Post">
+    <insert id="insertPost" parameterType="com.example.webapp.entity.Post">
         INSERT INTO posts
             (post_id, user_id, song_id, mood_tag_id, posted_at)
         VALUES
-            (#{postId}, #{userId}, 1, #{moodTagId}, now());
+            (#{postId}, #{userId}, #{songId}, #{moodTagId}, now());
     </insert>
 
     <!-- 投稿IDの重複チェック -->

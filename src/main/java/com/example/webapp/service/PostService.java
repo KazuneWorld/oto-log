@@ -1,6 +1,7 @@
 package com.example.webapp.service;
 
 
+import com.example.webapp.entity.Post;
 import com.example.webapp.mapper.PostMapper;
 
 
@@ -22,9 +23,11 @@ public class PostService {
     private static final int POST_ID_LENGTH = 12;
     //private String  testPostId = "POST00000001";      重複確認のテストデータ
     
-    public void insertPost(String userId, int moodTagId) {
+    public void insertPost(String userId, Post post) {
         String postId = generateUniquePostId();
-        postMapper.insertPostId(postId, userId, moodTagId);
+        post.setUserId(userId);
+        post.setPostId(postId);
+        postMapper.insertPost(post);
     }
 
     //指定した桁数のランダムな文字列を生成
