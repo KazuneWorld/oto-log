@@ -1,10 +1,7 @@
 package com.example.webapp.controller;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +16,6 @@ import com.example.webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-
-
-import com.example.webapp.entity.MoodTag;
-import com.example.webapp.mapper.PostMapper;
-
-import org.springframework.ui.Model;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.RequestParam;
-import com.example.webapp.service.PostService;
 
 // UserController
 @Controller
