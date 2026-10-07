@@ -14,7 +14,7 @@ public interface PostMapper {
     // すべてのタグ情報を取得する
     List<MoodTag> findAllTagId();
 
-    //投稿する
+    //投稿する（postテーブルに挿入）
     void insertPost(Post post);
 
     //投稿ID重複チェック

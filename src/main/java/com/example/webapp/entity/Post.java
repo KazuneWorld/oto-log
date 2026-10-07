@@ -18,12 +18,5 @@ public class Post {
     private int songId;
     private int moodTagId;
     private  Date postedAt;
-    //楽曲情報
-    private String trackId;
-    private String trackName;
-    private String artistName;
-    private String artworkUrl;
-    private String previewUrl;
-    private String appleMusicUrl;
     
 }

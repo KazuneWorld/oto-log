@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 
 import com.example.webapp.entity.MoodTag;
 import com.example.webapp.entity.Post;
+import com.example.webapp.entity.Song;
 import com.example.webapp.mapper.PostMapper;
 import com.example.webapp.service.PostService;
 
@@ -46,9 +47,9 @@ public class PostController {
 
     //投稿後のタイムライン画面
     @PostMapping("/timeline")
-    public String postTimeline(Authentication authentication, @ModelAttribute Post post) {
+    public String postTimeline(Authentication authentication, @ModelAttribute Post post, Song song) {
         String userId = authentication.getName();
-        postService.insertPost(userId, post);
+        postService.insertPost(userId, post, song);
         return "redirect:/timeline";
     }
 }
