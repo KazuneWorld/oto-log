@@ -48,8 +48,10 @@ public class PostController {
     public String postTimeline(Authentication authentication, @RequestParam("moodTagId") int moodTagId, @ModelAttribute Post post, Model model) {
         String userId = authentication.getName();
         postService.insertPost(userId, moodTagId);
+        System.out.println(postMapper.findAllFriendPostId());
         List<Post> friendPosts = postMapper.findAllFriendPostId();
         model.addAttribute("friendPosts", friendPosts);
+        System.out.println(friendPosts);
         return "redirect:/timeline";
     }
 }

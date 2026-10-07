@@ -16,6 +16,15 @@ INSERT INTO users (
     '$2a$08$rW06PhwvmUPBgWcSf.Wcq.xGmDkxhNcG3v43vNYdGM8R5kzNIy73q', -- user_pass_hash
     'おとログ',                                                       -- user_nickname
     NULL                                                              -- user_icon
+),
+(
+    'htsrRFNUoNxJ',                                                  -- user_id (12桁)
+    'otolog2',                                                        -- user_login_id
+    'bHzHur2o',                                                      -- friend_code (8桁)
+    'example2@example.com',                                          -- user_email
+    '$2a$10$/sI4nZK4Vz9lI85E4Mr4k.lBp334erl267.NPJlok2usoaigrD0YO', -- user_pass_hash
+    'おとログ2',                                                       -- user_nickname
+    NULL                                                              -- user_icon
 );
 
 -- 気分タグ 初期データ
@@ -52,9 +61,22 @@ INSERT INTO posts (
     mood_tag_id,
     posted_at
 ) VALUES (
-    'POST00000001',
+    'AAA111BBB222',
     'AAA111BBB222',
     '1',
     '1',
     NOW()
+);
+
+-- サンプルフレンド 初期データ
+INSERT INTO friends (
+    requester_id,
+    receiver_id,
+    friend_status,
+    notify_on_post
+) VALUES (
+    'AAA111BBB222',
+    'htsrRFNUoNxJ',
+    '1',
+    FALSE
 );

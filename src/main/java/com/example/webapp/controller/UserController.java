@@ -2,6 +2,8 @@ package com.example.webapp.controller;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +12,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.webapp.entity.Post;
 import com.example.webapp.entity.User;
 import com.example.webapp.service.AuthService;
 import com.example.webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import com.example.webapp.mapper.PostMapper;
 
 
 // UserController
@@ -26,6 +31,9 @@ public class UserController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private PostMapper postMapper;
 
     //最初の画面
     @GetMapping("/")
@@ -41,7 +49,9 @@ public class UserController {
 
     //タイムライン画面
     @GetMapping("/timeline")
-    public String timeline() {
+    public String timeline(Model model) {
+        List<Post> friendPosts = postMapper.findAllFriendPostId();
+        model.addAttribute("friendPosts", friendPosts);
         return "post/timeline";
     }
 

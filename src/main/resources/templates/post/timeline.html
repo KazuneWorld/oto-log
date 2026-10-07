@@ -13,6 +13,13 @@
 
     <h1>タイムライン</h1>
 
+
+    <div class="post" th:each="post : ${friendPosts}">
+        <span th:text="${post.userIcon}">ユーザアイコン</span>
+        <span th:text="${post.userNickname}">ユーザニックネーム</span>
+    </div>
+        
+
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>
 </body>
