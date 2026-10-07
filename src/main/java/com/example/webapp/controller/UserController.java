@@ -1,8 +1,8 @@
 package com.example.webapp.controller;
 
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import com.example.webapp.service.AuthService;
 import com.example.webapp.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 
 // UserController
@@ -29,13 +30,26 @@ public class UserController {
 
     //最初の画面
     @GetMapping("/")
-    public String index() {
-        return "user/index";
+    public String index(HttpServletRequest request) {
+        // もしすでにログイン中（Spring Securityの認証情報がある）かチェック
+        if (request.getUserPrincipal() != null) {
+            // ログイン済みの人はタイムラインへ強制送還
+            return "redirect:/timeline";
+        }
+        
+        return "index";
     }
 
     //ログイン画面(表示のみ、認証処理はSpring Securityが自動でやる)
+    // ログイン画面（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+         //もしすでにログイン中（Spring Securityの認証情報がある）かチェック
+        if (request.getUserPrincipal() != null) {
+             //ログイン済みの人はタイムラインへ強制送還
+            return "redirect:/timeline";
+        }
+        
         return "user/login";
     }
 
@@ -47,8 +61,14 @@ public class UserController {
 
 
     //会員登録フォームを表示
+    // 会員登録フォーム（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/signup")
-    public String signupForm(@ModelAttribute User user) {
+    public String signupForm(@ModelAttribute User user, HttpServletRequest request) {
+        // すでにログイン状態かチェック
+        if (request.getUserPrincipal() != null) {
+            // ログイン済みの人はタイムラインへ強制送還（逆バージョン）
+            return "redirect:/timeline";
+        }
         return "user/signup";
     }
 
