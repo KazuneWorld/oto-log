@@ -17,6 +17,10 @@
     <div class="post" th:each="post : ${friendPosts}">
         <span th:text="${post.userIcon}">ユーザアイコン</span>
         <span th:text="${post.userNickname}">ユーザニックネーム</span>
+        <span th:text="${post.trackname}">曲名</span>
+        <span th:text="${post.tagName}">気分タグ</span>
+        <a th:href="${post.previewUrl}" th:text="${post.previewUrl}" >プレビューリンク</a>
+        <a th:href="${post.appleMusicUrl}"  th:text="${post.appleMusicUrl}">AppleMusicリンク</a>
     </div>
         
 
