@@ -2,6 +2,7 @@ package com.example.webapp.controller;
 
 
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,26 @@ public class UserController {
 
     //最初の画面
     @GetMapping("/")
-    public String index() {
+    public String index(HttpServletRequest request) {
+        // もしすでにログイン中（Spring Securityの認証情報がある）かチェック
+        if (request.getUserPrincipal() != null) {
+            // ログイン済みの人はタイムラインへ強制送還
+            return "redirect:/timeline";
+        }
+        
         return "user/index";
     }
 
     //ログイン画面(表示のみ、認証処理はSpring Securityが自動でやる)
+    //（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/login")
-    public String login() {
+    public String login(HttpServletRequest request) {
+         //もしすでにログイン中（Spring Securityの認証情報がある）かチェック
+        if (request.getUserPrincipal() != null) {
+             //ログイン済みの人はタイムラインへ強制送還
+            return "redirect:/timeline";
+        }
+        
         return "user/login";
     }
 
@@ -56,9 +70,14 @@ public class UserController {
     }
 
 
-    //会員登録フォームを表示
+    // 会員登録フォームを表示（Spring Security逆バージョン：ログイン済みの人はタイムラインへ弾く）
     @GetMapping("/user/signup")
-    public String signupForm(@ModelAttribute User user) {
+    public String signupForm(@ModelAttribute User user, HttpServletRequest request) {
+        // すでにログイン状態かチェック
+        if (request.getUserPrincipal() != null) {
+            // ログイン済みの人はタイムラインへ強制送還（逆バージョン）
+            return "redirect:/timeline";
+        }
         return "user/signup";
     }
 
