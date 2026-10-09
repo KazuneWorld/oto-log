@@ -6,7 +6,7 @@
     <!-- 自分のユーザーIDを渡すと、そのユーザーのフレンド一覧（アイコン、ニックネーム）が返される -->
     <select id="findAllFriends" resultType="com.example.webapp.entity.Friend">
         SELECT
-            f.friend_relation_id AS FriendRelationId,
+            f.friend_relation_id AS friendRelationId,
             u.user_icon          AS userIcon,
             u.user_nickname      AS userNickname
         FROM friends f
@@ -17,6 +17,32 @@
                          END
         WHERE f.friend_status = 1
           AND (f.requester_id = #{userId} OR f.receiver_id = #{userId})
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+    <!-- 自分が送った申請(相手の承認待ち)の一覧を取得する -->
+    <select id="findAllPendingFriends" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS friendRelationId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u ON u.user_id = f.receiver_id
+        WHERE f.friend_status = 0
+        AND f.requester_id = #{userId}
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+    <!-- 自分に届いた申請(自分が承認するか決める)の一覧を取得する -->
+    <select id="findAllPendingApprovalFriends" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS friendRelationId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u ON u.user_id = f.requester_id
+        WHERE f.friend_status = 0
+        AND f.receiver_id = #{userId}
         ORDER BY f.friend_relation_id DESC
     </select>
 
