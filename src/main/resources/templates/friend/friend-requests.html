@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>フレンド管理</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+</head>
+
+<body>
+    <!-- ヘッダー部分を読み込む -->
+    <div th:replace="~{header :: header}"></div>
+
+    <!-- フレンド追加画面へのボタン -->
+    <form th:action="@{/friend/add}" method="get">
+        <button type="submit">フレンドを追加する</button>
+    </form>
+
+    <!-- リクエスト送信済みのユーザー一覧 -->
+    <h2>送信済みのフレンドリクエスト</h2>
+    <p>ここに送信済みのフレンドリクエストのリストを表示します。</p>
+
+    <!-- 承認待ちのユーザー一覧 -->
+    <h2>承認待ちのフレンドリクエスト</h2>
+    <p>ここに承認待ちのフレンドリクエストのリストを表示します。</p>
+
+    <!-- フッター部分を読み込む -->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+
+</html>
