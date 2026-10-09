@@ -3,7 +3,7 @@
 <mapper namespace="com.example.webapp.mapper.FriendMapper">
 
     <!-- フレンドコードでユーザーを検索する -->
-    <select id="findUserByCode" resultType="com.example.webapp.entity.User">
+    <select id="findUserByFriendCode" resultType="com.example.webapp.entity.User">
         SELECT
             u.user_id       AS userId,
             u.user_icon     AS userIcon,
@@ -19,25 +19,26 @@
     </insert>
 
     <!-- 自分のフレンド一覧を取得する -->
-    <!-- 自分のユーザーIDを渡すと、そのユーザーのフレンド一覧（アイコン、ニックネーム）が返される -->
-    <select id="findAllFriends" resultType="com.example.webapp.entity.Friend">
+    <!-- 自分のユーザーIDを渡すと、そのユーザーのフレンド一覧（アイコン、ニックネーム、プロフィール遷移用のuserId）が返される -->
+    <select id="findFriendsByUserId" resultType="com.example.webapp.entity.Friend">
         SELECT
             f.friend_relation_id AS friendRelationId,
+            u.user_id            AS userId,
             u.user_icon          AS userIcon,
             u.user_nickname      AS userNickname
         FROM friends f
         JOIN users u
-          ON u.user_id = CASE
-                           WHEN f.requester_id = #{userId} THEN f.receiver_id
-                           ELSE f.requester_id
-                         END
+        ON u.user_id = CASE
+                        WHEN f.requester_id = #{userId} THEN f.receiver_id
+                        ELSE f.requester_id
+                        END
         WHERE f.friend_status = 1
-          AND (f.requester_id = #{userId} OR f.receiver_id = #{userId})
+        AND (f.requester_id = #{userId} OR f.receiver_id = #{userId})
         ORDER BY f.friend_relation_id DESC
     </select>
 
     <!-- 自分が送った申請(相手の承認待ち)の一覧を取得する -->
-    <select id="findAllPendingFriends" resultType="com.example.webapp.entity.Friend">
+    <select id="findSentFriendRequests" resultType="com.example.webapp.entity.Friend">
         SELECT
             f.friend_relation_id AS friendRelationId,
             u.user_icon          AS userIcon,
@@ -50,7 +51,7 @@
     </select>
 
     <!-- 自分に届いた申請(自分が承認するか決める)の一覧を取得する -->
-    <select id="findAllPendingApprovalFriends" resultType="com.example.webapp.entity.Friend">
+    <select id="findReceivedFriendRequests" resultType="com.example.webapp.entity.Friend">
         SELECT
             f.friend_relation_id AS friendRelationId,
             u.user_icon          AS userIcon,
@@ -63,7 +64,7 @@
     </select>
 
     <!-- フレンド申請の承認(自分が受信側の申請中レコードのみ) -->
-    <update id="approveFriendRequest">
+    <update id="acceptFriendRequest">
         UPDATE friends
         SET friend_status = 1
         WHERE friend_relation_id = #{friendRelationId}
@@ -72,7 +73,7 @@
     </update>
 
     <!-- 申請の取り下げ(自分が送った申請中レコードのみ) -->
-    <delete id="cancelFriendRequest">
+    <delete id="withdrawFriendRequest">
         DELETE FROM friends
         WHERE friend_relation_id = #{friendRelationId}
         AND requester_id = #{userId}
