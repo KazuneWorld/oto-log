@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.FriendMapper">
+
+    <!-- 自分のフレンド一覧を取得する -->
+    <!-- 自分のユーザーIDを渡すと、そのユーザーのフレンド一覧（アイコン、ニックネーム）が返される -->
+    <select id="findAllFriends" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS FriendRelationId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u
+          ON u.user_id = CASE
+                           WHEN f.requester_id = #{userId} THEN f.receiver_id
+                           ELSE f.requester_id
+                         END
+        WHERE f.friend_status = 1
+          AND (f.requester_id = #{userId} OR f.receiver_id = #{userId})
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+</mapper>
