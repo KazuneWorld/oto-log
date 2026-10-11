@@ -26,7 +26,7 @@
     </select>
 
     <!-- 自分のブックマーク一覧(投稿者が自分またはフレンドのもののみ) -->
-    <select id="findBookmarkedPosts" resultType="com.example.webapp.entity.BookmarkedPost">
+    <select id="findBookmarkedPosts" resultType="com.example.webapp.entity.Bookmark">
         SELECT
             b.bookmark_id     AS bookmarkId,
             p.post_id         AS postId,
