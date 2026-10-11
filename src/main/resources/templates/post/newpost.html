@@ -7,30 +7,66 @@
     <!-- PWA用の共通フラグメントを読み込む。 -->
     <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     <title>投稿</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+    <link rel="stylesheet" th:href="@{/css/newpost.css}">
 </head>
 
 <body>
-    <!-- ヘッダー部分を読み込む -->
-    <div th:replace="~{header :: header}"></div>
 
-    <h1>投稿</h1>
-    <!-- この部分に選択した音楽のジャケ写を表示させる -->
+<h1>投稿</h1>
+
+    <!-- ==========楽曲選択エリア(まだ曲を選んでいない状態時に表示)========== -->
+<div id="song-browse-section">
+
+    <h3>楽曲を検索する</h3>
+    <input type="text" id="search-keyword" placeholder="曲名・アーティスト名で検索">
+    <button type="button" id="search-button">検索</button>
+
+    <!--
+        「人気ランキング」と「検索結果」は同じ場所(#song-list-section)に表示する。
+        ランキングは主機能ではなく補助的な表示のため、ページ表示自体を待たせないよう
+        Thymeleafでは描画せず、ページ読み込み後にJSがAPIを叩いて後から差し込む。
+        取得できるまでは読み込み中の表示を出しておく。
+    -->
+    <h3 id="song-list-heading">人気ランキング</h3>
+    <div id="song-list-section" class="song-list">
+        <p id="song-list-loading" class="loading-text">読み込み中...</p>
+    </div>
+</div>
+
+    <!-- ==========曲を選択した後のエリア(初期状態は非表示)========== -->
+<div id="selected-section" style="display:none;">
+
+    <h3>選択した楽曲</h3>
+    <div class="selected-song">
+        <img id="selected-artwork" src="" alt="">
+        <div>
+            <p id="selected-track-name"></p>
+            <p id="selected-artist-name" class="artist"></p>
+        </div>
+    </div>
+    <button type="button" onclick="backToBrowse()">曲を選び直す</button>
 
     <h3>気分タグ</h3>
-    <!-- タグ名一覧を表示 -->
-    <form th:action="@{/timeline}" method="post">
+    <form th:action="@{/timeline}" method="post" id="post-form">
+
+        <!-- 選択した曲の情報を、投稿時にまとめて送信するための隠しフィールド -->
+        <!-- appleMusicUrlはこの画面では表示しないが、投稿詳細画面で使う想定のため保持しておく -->
+        <input type="hidden" name="trackId" id="input-track-id">
+        <input type="hidden" name="trackName" id="input-track-name">
+        <input type="hidden" name="artistName" id="input-artist-name">
+        <input type="hidden" name="artworkUrl" id="input-artwork-url">
+        <input type="hidden" name="previewUrl" id="input-preview-url">
+        <input type="hidden" name="appleMusicUrl" id="input-apple-music-url">
+
+            <!-- タグ名一覧を表示 -->
         <div th:each="moodtag : ${moodTags}">
             <input type="radio" name="moodTagId" th:value="${moodtag.moodTagId}" required>
             <label th:text="${moodtag.tagName}"></label>
         </div>
         <input type="submit" value="投稿する">
     </form>
-
-    <a th:href="@{/timeline}">戻る</a>
-    
-
-    
+</div>
+<script th:src="@{/js/newpost.js}"></script>
 </body>
 
 </html>

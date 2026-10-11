@@ -8,6 +8,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +36,15 @@ public class ItunesRankingService {
 
     private static final String LOOKUP_BASE_URL = "https://itunes.apple.com/lookup";
 
+    // キャッシュの有効期間(この間は外部APIを呼ばず、前回の結果を使い回す)
+    private static final Duration CACHE_TTL = Duration.ofMinutes(30);
+
     private final RestTemplate restTemplate;
+
+    // 複数リクエストが同時に来る可能性があるため volatile にして、
+    // 「キャッシュを読む/書く」際に他スレッドから見える状態を最新に保つ
+    private volatile List<ItunesTrackDto> cachedSongs = Collections.emptyList();
+    private volatile Instant cachedAt = Instant.EPOCH;
 
     public ItunesRankingService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -42,16 +52,47 @@ public class ItunesRankingService {
 
     /**
      * 人気楽曲ランキングを取得する。
-     * previewUrlの取得に失敗した曲があっても、その曲だけpreviewUrl=nullとして返す
-     * (ランキング自体は表示できた方が良いため、部分的な失敗で全体を空にはしない)。
+     * キャッシュが有効な間はそれを返し、期限切れの場合のみ外部APIへ問い合わせる。
+     * 外部API呼び出しに失敗した場合、古いキャッシュが残っていればそれを返す
+     * (真っ白な画面よりは、多少古くても表示できた方が体験として良いため)。
      *
-     * @return ランキング順の曲リスト。取得自体に失敗した場合は空リストを返す。
+     * @return ランキング順の曲リスト。キャッシュも取得もない場合は空リストを返す。
      */
     public List<ItunesTrackDto> getPopularSongs() {
+        if (isCacheValid()) {
+            return cachedSongs;
+        }
+
+        List<ItunesTrackDto> fresh = fetchFromApi();
+
+        if (!fresh.isEmpty()) {
+            cachedSongs = fresh;
+            cachedAt = Instant.now();
+            return fresh;
+        }
+
+        // 取得失敗(空リスト)の場合、古いキャッシュがあればそれで代用する
+        if (!cachedSongs.isEmpty()) {
+            log.warn("最新のランキング取得に失敗したため、キャッシュ(取得日時: {})を返します。", cachedAt);
+            return cachedSongs;
+        }
+
+        return Collections.emptyList();
+    }
+
+    private boolean isCacheValid() {
+        return !cachedSongs.isEmpty()
+                && Duration.between(cachedAt, Instant.now()).compareTo(CACHE_TTL) < 0;
+    }
+
+    /**
+     * 外部API(ランキング+Lookup)を実際に呼び出し、正規化した曲リストを返す。
+     * 失敗した場合は空リストを返す(呼び出し元でキャッシュへのフォールバックを行う)。
+     */
+    private List<ItunesTrackDto> fetchFromApi() {
         ItunesRankingResponse ranking = fetchRanking();
 
         if (ranking == null || ranking.getFeed() == null || ranking.getFeed().getResults() == null) {
-            // ItunesRankingResponse.Feed が null、または results が null のケースをまとめて弾く
             log.warn("ランキングAPIから空のレスポンスが返却されました。");
             return Collections.emptyList();
         }
