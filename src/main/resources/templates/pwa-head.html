@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--
+        PWA用の共通フラグメント。各ページの <head> 内に、次の1行を追加して使う。
+            <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
+    -->
+    <th:block th:fragment="pwaHead">
+        <!-- Webアプリマニフェスト(アプリ名・アイコン・起動URLなどの定義) -->
+        <link rel="manifest" th:href="@{/manifest.json}">
+
+        <!-- ブラウザのアドレスバーやステータスバーの色 -->
+        <meta name="theme-color" content="#FF4E6B">
+
+        <!-- iOS(Safari)向け: ホーム画面に追加した時のアイコン・全画面表示・アプリ名 -->
+        <link rel="apple-touch-icon" th:href="@{/images/pwa/apple-touch-icon.png}">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="おとログ">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+        <!-- Service Workerの登録 -->
+        <script th:src="@{/js/pwa-register.js}" defer></script>
+    </th:block>
+</head>
+<body></body>
+</html>
