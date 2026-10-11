@@ -126,7 +126,7 @@ CREATE TABLE bookmarks (
     PRIMARY KEY (bookmark_id),
     UNIQUE KEY uq_bookmarks_user_post (user_id, post_id),
     CONSTRAINT fk_bookmarks_user FOREIGN KEY (user_id) REFERENCES users (user_id),
-    CONSTRAINT fk_bookmarks_post FOREIGN KEY (post_id) REFERENCES posts (post_id)
+    CONSTRAINT fk_bookmarks_post FOREIGN KEY (post_id) REFERENCES posts (post_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
