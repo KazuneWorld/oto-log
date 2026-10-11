@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.BookmarkMapper">
+
+    <!-- 投稿をブックマークするSQL -->
+    <insert id="addBookmark">
+        INSERT IGNORE INTO bookmarks (user_id, post_id)
+        VALUES (#{userId}, #{postId})
+    </insert>
+    
+    <!-- 投稿のブックマークを解除するSQL -->
+    <delete id="removeBookmark">
+        DELETE FROM bookmarks
+        WHERE user_id = #{userId}
+        AND post_id = #{postId}
+    </delete>
+
+    <!-- ブックマーク済みかの確認 -->
+    <!-- 投稿一覧で「ブックマーク済みマーク」を出すときに使う？ -->
+    <select id="existsBookmark" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM bookmarks
+            WHERE user_id = #{userId}
+            AND post_id = #{postId}
+        )
+    </select>
+
+    <!-- 自分のブックマーク一覧(投稿者が自分またはフレンドのもののみ) -->
+    <select id="findBookmarkedPosts" resultType="com.example.webapp.entity.BookmarkedPost">
+        SELECT
+            b.bookmark_id     AS bookmarkId,
+            p.post_id         AS postId,
+            p.posted_at       AS postedAt,
+            u.user_id         AS postUserId,
+            u.user_nickname   AS userNickname,
+            u.user_icon       AS userIcon,
+            s.track_name      AS trackName,
+            s.artist_name     AS artistName,
+            s.artwork_url     AS artworkUrl,
+            s.preview_url     AS previewUrl,
+            s.apple_music_url AS appleMusicUrl,
+            m.tag_name        AS tagName
+        FROM bookmarks b
+        JOIN posts p     ON p.post_id = b.post_id
+        JOIN users u     ON u.user_id = p.user_id
+        JOIN songs s     ON s.song_id = p.song_id
+        JOIN mood_tags m ON m.mood_tag_id = p.mood_tag_id
+        WHERE b.user_id = #{userId}
+        AND (
+                p.user_id = #{userId}
+                OR EXISTS (
+                    SELECT 1
+                    FROM friends f
+                    WHERE f.friend_status = 1
+                    AND (
+                            (f.requester_id = #{userId} AND f.receiver_id = p.user_id)
+                        OR (f.receiver_id  = #{userId} AND f.requester_id = p.user_id)
+                    )
+                )
+            )
+        ORDER BY b.bookmark_id DESC
+    </select>
+
+</mapper>
