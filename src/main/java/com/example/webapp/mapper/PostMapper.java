@@ -14,8 +14,8 @@ public interface PostMapper {
     // すべてのタグ情報を取得する
     List<MoodTag> findAllTagId();
 
-    //投稿する
-    void insertPostId(@Param("postId") String postId, @Param ("userId") String userId, @Param("moodTagId") int moodTagId);
+    //投稿する（postテーブルに挿入）
+    void insertPost(Post post);
 
     //投稿ID重複チェック
     boolean existsByPostId(@Param("postId") String postId);

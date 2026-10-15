@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.FriendMapper">
+
+    <!-- フレンドコードでユーザーを検索する -->
+    <select id="findUserByFriendCode" resultType="com.example.webapp.entity.User">
+        SELECT
+            u.user_id       AS userId,
+            u.user_icon     AS userIcon,
+            u.user_nickname AS userNickname
+        FROM users u
+        WHERE u.friend_code = #{friendCode}
+    </select>
+
+    <!-- ユーザーにフレンド申請を送る -->
+    <insert id="sendFriendRequest">
+        INSERT INTO friends (requester_id, receiver_id, friend_status)
+        VALUES (#{requesterId}, #{receiverId}, 0)
+    </insert>
+
+    <!-- 自分のフレンド一覧を取得する -->
+    <!-- 自分のユーザーIDを渡すと、そのユーザーのフレンド一覧（アイコン、ニックネーム、プロフィール遷移用のuserId）が返される -->
+    <select id="findFriendsByUserId" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS friendRelationId,
+            u.user_id            AS userId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u
+        ON u.user_id = CASE
+                        WHEN f.requester_id = #{userId} THEN f.receiver_id
+                        ELSE f.requester_id
+                        END
+        WHERE f.friend_status = 1
+        AND (f.requester_id = #{userId} OR f.receiver_id = #{userId})
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+    <!-- 自分が送った申請(相手の承認待ち)の一覧を取得する -->
+    <select id="findSentFriendRequests" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS friendRelationId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u ON u.user_id = f.receiver_id
+        WHERE f.friend_status = 0
+        AND f.requester_id = #{userId}
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+    <!-- 自分に届いた申請(自分が承認するか決める)の一覧を取得する -->
+    <select id="findReceivedFriendRequests" resultType="com.example.webapp.entity.Friend">
+        SELECT
+            f.friend_relation_id AS friendRelationId,
+            u.user_icon          AS userIcon,
+            u.user_nickname      AS userNickname
+        FROM friends f
+        JOIN users u ON u.user_id = f.requester_id
+        WHERE f.friend_status = 0
+        AND f.receiver_id = #{userId}
+        ORDER BY f.friend_relation_id DESC
+    </select>
+
+    <!-- フレンド申請の承認(自分が受信側の申請中レコードのみ) -->
+    <update id="acceptFriendRequest">
+        UPDATE friends
+        SET friend_status = 1
+        WHERE friend_relation_id = #{friendRelationId}
+        AND receiver_id = #{userId}
+        AND friend_status = 0
+    </update>
+
+    <!-- 申請の取り下げ(自分が送った申請中レコードのみ) -->
+    <delete id="withdrawFriendRequest">
+        DELETE FROM friends
+        WHERE friend_relation_id = #{friendRelationId}
+        AND requester_id = #{userId}
+        AND friend_status = 0
+    </delete>
+
+    <!-- 申請の却下(自分に届いた申請中レコードのみ) -->
+    <delete id="rejectFriendRequest">
+        DELETE FROM friends
+        WHERE friend_relation_id = #{friendRelationId}
+        AND receiver_id = #{userId}
+        AND friend_status = 0
+    </delete>
+
+    <!-- フレンドの削除(自分が当事者のフレンド関係のみ) -->
+    <delete id="deleteFriend">
+        DELETE FROM friends
+        WHERE friend_relation_id = #{friendRelationId}
+        AND friend_status = 1
+        AND (requester_id = #{userId} OR receiver_id = #{userId})
+    </delete>
+
+</mapper>

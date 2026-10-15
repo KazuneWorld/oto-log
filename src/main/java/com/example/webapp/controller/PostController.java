@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 
 import com.example.webapp.entity.MoodTag;
 import com.example.webapp.entity.Post;
+import com.example.webapp.entity.Song;
 import com.example.webapp.mapper.PostMapper;
 import com.example.webapp.service.PostService;
 
@@ -38,6 +39,7 @@ public class PostController {
     //投稿の画面
     @GetMapping("/newpost")
     public String newPost(Model model) {
+        // 気分タグの取得
         List<MoodTag> moodTags = postMapper.findAllTagId();
         model.addAttribute("moodTags", moodTags);
         return "post/newpost";
@@ -45,13 +47,21 @@ public class PostController {
 
     //投稿後のタイムライン画面
     @PostMapping("/timeline")
-    public String postTimeline(Authentication authentication, @RequestParam("moodTagId") int moodTagId, @ModelAttribute Post post, Model model) {
+
+    public String postTimeline(Authentication authentication, @RequestParam("moodTagId") int moodTagId, @ModelAttribute Post post, @ModelAttribute Song song, Model model) {
         String userId = authentication.getName();
-        postService.insertPost(userId, moodTagId);
+        postService.insertPost(userId, post, song);
         System.out.println(postMapper.findAllFriendPostId());
         List<Post> friendPosts = postMapper.findAllFriendPostId();
         model.addAttribute("friendPosts", friendPosts);
         System.out.println(friendPosts);
+        return "post/timeline";
+    }
+
+    public String postTimeline(Authentication authentication, @ModelAttribute Post post, @ModelAttribute Song song) {
+        String userId = authentication.getName();
+        postService.insertPost(userId, post, song);
+
         return "redirect:/timeline";
     }
 }

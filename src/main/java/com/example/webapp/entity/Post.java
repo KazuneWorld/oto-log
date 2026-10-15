@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,6 +19,7 @@ public class Post {
     private int songId;
     private int moodTagId;
     private  Date postedAt;
+
     
     //投稿表示に必要なユーザ情報
     private String userNickname;
@@ -32,6 +34,8 @@ public class Post {
     
     //投稿表示に必要なタグ情報
     private String tagName;
+
+
 
     
 }
