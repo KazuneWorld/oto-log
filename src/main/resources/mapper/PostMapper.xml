@@ -27,7 +27,7 @@
     </select>
 
     <!-- フレンド状態のすべての投稿情報を取得するSQL -->
-    <select id="findAllFriendPostId" resultType="com.example.webapp.entity.Post">
+    <select id="findAllFriendPostId" resultType="com.example.webapp.entity.TimelinePost">
         SELECT
             p.post_id        AS postId,
             p.user_id        AS userId,
@@ -47,6 +47,16 @@
         JOIN songs s ON p.song_id = s.song_id
         JOIN mood_tags m ON p.mood_tag_id = m.mood_tag_id
         JOIN friends f ON u.user_id = f.requester_id OR u.user_id = f.receiver_id
+        WHERE p.user_id = #{userId}
+        OR EXISTS (
+            SELECT 1
+            FROM friends f
+            WHERE f.friend_status = 1
+              AND (
+                    (f.requester_id = #{userId} AND f.receiver_id = p.user_id)
+                 OR (f.receiver_id  = #{userId} AND f.requester_id = p.user_id)
+              )
+        )
         ORDER BY p.posted_at DESC
     </select>
 
