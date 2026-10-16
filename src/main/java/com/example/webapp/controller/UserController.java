@@ -1,11 +1,12 @@
 package com.example.webapp.controller;
 
-
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -113,4 +114,77 @@ public class UserController {
         return "user/setting-accounts";
     }
 
+    // プロフィール画面
+    /*@GetMapping("/user/{userId}")
+    public String userProfile(@PathVariable String userId, Authentication authentication,Model model) {
+
+        // ログインしていない場合
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getName())) {
+            return "redirect:/user/login";
+        }
+
+        // 表示対象のユーザーを取得
+        User profileUser = userService.findById(userId);
+
+        // ユーザーが存在しない場合
+        if (profileUser == null) {
+            return "redirect:/timeline";
+        }
+
+        // ログイン中のユーザーを取得
+        String loginValue = authentication.getName();
+        User loginUser = userService.findByLoginValue(loginValue);
+
+        if (loginUser == null) {
+            return "redirect:/user/login";
+        }
+
+        // 自分のプロフィールかどうか判定
+        boolean isMyPage = loginUser.getUserId().equals(profileUser.getUserId());
+
+        model.addAttribute("profileUser", profileUser);
+        model.addAttribute("isMyPage", isMyPage);
+
+        return "user/profile";
+    }*/
+   @GetMapping("/user/{userId}")
+public String userProfile(
+        @PathVariable String userId,
+        Authentication authentication,
+        Model model) {
+
+    System.out.println("受け取ったuserId：" + userId);
+
+    if (authentication == null
+            || !authentication.isAuthenticated()
+            || "anonymousUser".equals(authentication.getName())) {
+        System.out.println("ログインしていないためログイン画面へ");
+        return "redirect:/user/login";
+    }
+
+    User profileUser = userService.findProfileById(userId);
+
+    System.out.println("取得したprofileUser：" + profileUser);
+
+    if (profileUser == null) {
+        System.out.println("ユーザーが見つからないためタイムラインへ");
+        return "redirect:/timeline";
+    }
+
+    String loginValue = authentication.getName();
+    User loginUser = userService.findByLoginValue(loginValue);
+
+    if (loginUser == null) {
+        System.out.println("ログイン中のユーザーが見つからない");
+        return "redirect:/user/login";
+    }
+
+    boolean isMyPage =
+            loginUser.getUserId().equals(profileUser.getUserId());
+
+    model.addAttribute("profileUser", profileUser);
+    model.addAttribute("isMyPage", isMyPage);
+
+    return "user/profile";
+}
 }

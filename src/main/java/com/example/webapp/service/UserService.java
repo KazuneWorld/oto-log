@@ -35,6 +35,23 @@ public class UserService {
         userMapper.insert(user);
     }
 
+    // ユーザーIDからプロフィール情報を取得
+    public User findById(String userId) {
+        return userMapper.findById(userId);
+    }
+
+    
+    // プロフィール表示用にユーザー情報を取得
+    public User findProfileById(String userId) {
+        return userMapper.findProfileById(userId);
+    }
+
+
+    // ログイン情報からユーザーを取得
+    public User findByLoginValue(String loginValue) {
+        return userMapper.findByLoginValue(loginValue);
+    }
+
     // メールアドレスが既に使われているか確認する
     public boolean isEmailTaken(String userEmail) {
         return userMapper.existsByEmail(userEmail);

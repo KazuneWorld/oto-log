@@ -7,7 +7,11 @@
         <a th:href="@{/bookmarks}"><img th:src="@{/images/bookmark.png}" alt="ブックマーク" style="width: 40px; height: 40px;"></a>
         <a th:href="@{/newpost}"><img th:src="@{/images/newpost.png}" alt="新規投稿" style="width: 40px; height: 40px;"></a>
         <a th:href="@{/notifications}"><img th:src="@{/images/notification.png}" alt="通知" style="width: 40px; height: 40px;"></a>
-        <a th:href="@{/{id}(id=${userInfo.userId})}"><img th:src="@{/images/mypage.png}" alt="マイページ" style="width: 40px; height: 40px;"></a>
+        <a th:href="@{/user/{id}(id=${userInfo.userId})}">
+    <img th:src="@{/images/mypage.png}"
+         alt="マイページ"
+         style="width: 40px; height: 40px;">
+</a>
     </footer>
 </body>
 </html>

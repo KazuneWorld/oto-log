@@ -26,6 +26,17 @@
         WHERE user_email = #{loginValue} OR user_login_id = #{loginValue}
     </select>
 
+    <!-- プロフィール表示用(管理用ユーザーIDでユーザー情報を取得) -->
+    <select id="findProfileById" resultType="com.example.webapp.entity.User">
+            SELECT
+            user_id       AS userId,
+            user_icon     AS userIcon,
+            user_nickname AS userNickname,
+            friend_code   AS friendCode
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+
     <!-- （ユーザー情報変更・フッター用）ログイン中ユーザーの管理用ユーザーIDで、ユーザー情報を取得するSQL -->
     <select id="findById" resultType="com.example.webapp.entity.User">
         SELECT

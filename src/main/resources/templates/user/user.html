@@ -12,7 +12,28 @@
     <!-- ヘッダー部分を読み込む -->
     <div th:replace="~{header :: header}"></div>
 
-    
+    <div class="profile">
+        <!-- アイコン -->
+        <img th:if="${profileUser.userIcon != null}" th:src="${profileUser.userIcon}" alt="プロフィールアイコン">
+
+        <!-- ニックネーム -->
+        <h1 th:text="${profileUser.userNickname}"></h1>
+
+        <!-- フレンドコード -->
+        <p>
+            フレンドコード：<span th:text="${profileUser.friendCode}"></span>
+        </p>
+
+        <!-- 自分のプロフィール -->
+        <div th:if="${isMyPage}">
+            <a th:href="@{/settings/account}">ユーザー情報を変更</a>
+        </div>
+
+        <!-- 他のユーザーのプロフィール -->
+        <div th:unless="${isMyPage}">
+            <button type="button">フレンド追加</button>
+        </div>
+    </div>
 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>
