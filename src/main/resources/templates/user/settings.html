@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html>
-
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>設定</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/settings.css}"> -->
+    <!-- ビューポートの設定。スマホでの表示に必要 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PWA用の共通フラグメントを読み込む。 -->
+    <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
+    <title>設定メニュー</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
 </head>
 
 <body>
@@ -23,7 +25,9 @@
     <p><input type="radio" id="color" name="color" value="navy" disabled>ネイビー</p>
     <button type="submit">変更</button>
 
-	<a th:href="@{#}">ログアウト</a>
+    <form th:action="@{/users/logout}" method="post">
+        <button type="submit" th:onclick="return confirm('ログアウトしますか？');">ログアウト</button>
+    </form>
 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- ビューポートの設定。スマホでの表示に必要 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PWA用の共通フラグメントを読み込む。 -->
+    <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
+    <title>通知</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+</head>
+
+<body>
+    <!-- ヘッダー部分を読み込む -->
+    <div th:replace="~{header :: header}"></div>
+
+
+
+    <!-- フッター部分を読み込む -->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+
+</html>

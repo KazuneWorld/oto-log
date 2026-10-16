@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- ビューポートの設定。スマホでの表示に必要 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PWA用の共通フラグメントを読み込む。 -->
+    <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     <title>会員登録</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
 </head>
 
 <body>

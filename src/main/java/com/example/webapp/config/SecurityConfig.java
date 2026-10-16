@@ -26,6 +26,8 @@ public class SecurityConfig {
                     .requestMatchers("/h2-console/**").permitAll()
                     // 404などのエラー画面への転送を許可する
                     .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                    // PWA用のリソースへのアクセスを許可する
+                    .requestMatchers("/manifest.json", "/sw.js", "/offline.html").permitAll()
                     // 静的リソースは誰でもアクセス可能
                     .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                     // 誰でもOK画面
@@ -39,7 +41,8 @@ public class SecurityConfig {
 
             // ログイン設定
             .formLogin(form -> form
-                    .loginPage("/user/login")       // 自作ログインページ(GET)
+                    //spring securityのルール上loginPageでなければならない
+                    .loginPage("/")               // 自作トップページ(GET)
                     .loginProcessingUrl("/user/login") // フォームのPOST先(Spring Securityが処理)
                     .usernameParameter("userEmail")   // メールアドレスを送るフィールド名
                     .passwordParameter("password")

@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "おとログ",
+  "short_name": "おとログ",
+  "description": "身内だけで「いま、何聴いてる？」を共有する音楽SNS",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#FF4E6B",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/images/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/pwa/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

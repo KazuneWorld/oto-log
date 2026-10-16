@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!-- ビューポートの設定。スマホでの表示に必要 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- PWA用の共通フラグメントを読み込む。 -->
+    <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
+    <title>フレンド管理</title>
+    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+</head>
+
+<body>
+    <!-- ヘッダー部分を読み込む -->
+    <div th:replace="~{header :: header}"></div>
+
+    <!-- フレンド追加画面へのボタン -->
+    <form th:action="@{/friend/add}" method="get">
+        <button type="submit">フレンドを追加する</button>
+    </form>
+
+    <!-- リクエスト送信済みのユーザー一覧 -->
+    <h2>送信済みのフレンドリクエスト</h2>
+    <p>ここに送信済みのフレンドリクエストのリストを表示します。</p>
+
+    <!-- 承認待ちのユーザー一覧 -->
+    <h2>承認待ちのフレンドリクエスト</h2>
+    <p>ここに承認待ちのフレンドリクエストのリストを表示します。</p>
+
+    <!-- フッター部分を読み込む -->
+    <div th:replace="~{footer :: footer}"></div>
+</body>
+
+</html>

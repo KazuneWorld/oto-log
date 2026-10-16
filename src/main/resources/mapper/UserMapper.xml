@@ -3,6 +3,7 @@
 <mapper namespace="com.example.webapp.mapper.UserMapper">
 
     <!-- update ユーザー情報変更 -->
+    <!-- ユーザーアイコンの設定は難しいかもだから、一旦保留でおｋ（その他の項目をよろしく） -->
     <update id="update" parameterType="com.example.webapp.entity.User">
         UPDATE users
         SET 
