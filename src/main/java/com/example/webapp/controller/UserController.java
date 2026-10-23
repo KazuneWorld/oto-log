@@ -103,14 +103,42 @@ public class UserController {
 
     // 設定画面
     @GetMapping("/settings")
-    public String settings() {
+    public String settings(HttpServletRequest request, Model model) {
+
+        if (request.getUserPrincipal() == null) {
+           return "redirect:/user/login";
+        }
+
+        String userId = request.getUserPrincipal().getName();
+        User user = userService.findById(userId);
+
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        model.addAttribute("user", user);
+
         return "user/settings";
     }
 
-    //ユーザー情報変更画面
-    @GetMapping("/settings/account")
-    public String settingAccounts() {
+    // ユーザー情報変更画面
+        @GetMapping("/settings/account")
+    public String settingAccounts(
+        HttpServletRequest request, Model model) {
+
+        if (request.getUserPrincipal() == null) {
+            return "redirect:/user/login";
+        }
+
+        String userId = request.getUserPrincipal().getName();
+        User user = userService.findById(userId);
+
+        if (user == null) {
+            return "redirect:/user/login";
+        }
+
+        model.addAttribute("user", user);
+
         return "user/setting-accounts";
     }
-
 }

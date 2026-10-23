@@ -71,4 +71,14 @@ public class UserService {
         } while (userMapper.existsByFriendCode(friendCode));
         return friendCode;
     }
+
+    // ログインIDまたはメールアドレスからユーザー情報を取得
+    public User findByLoginValue(String loginValue) {
+        return userMapper.findByLoginValue(loginValue);
+    }
+
+    // 内部ユーザーIDからユーザー情報を取得
+    public User findById(String userId) {   
+        return userMapper.findById(userId);
+    }
 }
