@@ -27,4 +27,7 @@ public interface UserMapper {
 
     // ログイン用ユーザーIDが既に使われているか確認する
     boolean existsByLoginId(@Param("userLoginId") String userLoginId);
+
+    //ユーザー情報をDBに登録する
+    void update(User user);
 }
