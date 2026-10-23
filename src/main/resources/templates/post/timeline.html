@@ -17,13 +17,14 @@
     <h1>タイムライン</h1>
 
 
-    <div class="post" th:each="post : ${friendPosts}">
-        <span th:text="${post.userIcon}">ユーザアイコン</span>
-        <span th:text="${post.userNickname}">ユーザニックネーム</span>
-        <span th:text="${post.trackname}">曲名</span>
-        <span th:text="${post.tagName}">気分タグ</span>
-        <a th:href="${post.previewUrl}" th:text="${post.previewUrl}" >プレビューリンク</a>
-        <a th:href="${post.appleMusicUrl}"  th:text="${post.appleMusicUrl}">AppleMusicリンク</a>
+    <div class="post" th:each="timelinepost : ${friendPosts}">
+        <p>あ</p>
+        <span th:text="${timelinepost.userIcon}">ユーザアイコン</span>
+        <span th:text="${timelinepost.userNickname}">ユーザニックネーム</span>
+        <span th:text="${timelinepost.trackName}">曲名</span>
+        <span th:text="${timelinepost.tagName}">気分タグ</span>
+        <a th:href="${timelinepost.previewUrl}" th:text="${timelinepost.previewUrl}" >プレビューリンク</a>
+        <a th:href="${timelinepost.appleMusicUrl}"  th:text="${timelinepost.appleMusicUrl}">AppleMusicリンク</a>
     </div>
         
 
