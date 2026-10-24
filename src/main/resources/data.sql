@@ -16,6 +16,24 @@ INSERT INTO users (
     '$2a$08$rW06PhwvmUPBgWcSf.Wcq.xGmDkxhNcG3v43vNYdGM8R5kzNIy73q', -- user_pass_hash
     'おとログ',                                                       -- user_nickname
     NULL                                                              -- user_icon
+),
+(
+    'htsrRFNUoNxJ',                                                  -- user_id (12桁)
+    'otolog2',                                                        -- user_login_id
+    'bHzHur2o',                                                      -- friend_code (8桁)
+    'example2@example.com',                                          -- user_email
+    '$2a$10$/sI4nZK4Vz9lI85E4Mr4k.lBp334erl267.NPJlok2usoaigrD0YO', -- user_pass_hash
+    'おとログ2',                                                       -- user_nickname
+    NULL                                                              -- user_icon
+),
+(
+    'AAA111BBB223',                                                  -- user_id (12桁)
+    'otolog3',                                                        -- user_login_id
+    'EFGH5678',                                                      -- friend_code (8桁)
+    'example3@example.com',                                          -- user_email
+    '$2a$08$rW06PhwvmUPBgWcSf.Wcq.xGmDkxhNcG3v43vNYdGM8R5kzNIy73q', -- user_pass_hash
+    'おとログ3',                                                       -- user_nickname
+    NULL                                                              -- user_icon
 );
 
 -- 気分タグ 初期データ
@@ -52,9 +70,51 @@ INSERT INTO posts (
     mood_tag_id,
     posted_at
 ) VALUES (
-    'POST00000001',
+    'AAA111BBB222',
     'AAA111BBB222',
     '1',
     '1',
     NOW()
 );
+
+-- サンプルフレンド 初期データ1（おとログ1とおとログ2が友達状態）
+INSERT INTO friends (
+    requester_id,
+    receiver_id,
+    friend_status,
+    requester_notify_on_post,
+    receiver_notify_on_post
+) VALUES (
+    'AAA111BBB222',
+    'htsrRFNUoNxJ',
+    '1',
+    TRUE,
+    TRUE
+);
+
+-- サンプルフレンド 初期データ2（おとログ3さんがおとログ1さんにフレンド申請中）
+INSERT INTO friends (
+    requester_id,
+    receiver_id,
+    friend_status,
+    requester_notify_on_post,
+    receiver_notify_on_post
+) VALUES (
+    'AAA111BBB223',
+    'AAA111BBB222',
+    '0',
+    FALSE,
+    FALSE
+);
+
+-- サンプルリアクション 初期データ（一日前に初期投稿におとログ2さんがリアクションをした）
+INSERT INTO reactions (post_id, user_id, reaction_emoji, reacted_at) VALUES
+    ('AAA111BBB222', 'htsrRFNUoNxJ', '❤️', TIMESTAMPADD(DAY,  -1, CURRENT_TIMESTAMP));
+
+-- サンプル通知 初期データ1（一日前におとログ2さんがリアクションしたことをおとログ1さんに通知する）
+INSERT INTO notifications (recipient_id, sender_id, notification_type, post_id, is_read, created_at) VALUES
+    ('AAA111BBB222', 'htsrRFNUoNxJ', '2', 'AAA111BBB222', FALSE, TIMESTAMPADD(DAY,  -1, CURRENT_TIMESTAMP));
+
+-- サンプル通知 初期データ2（一日前におとログ3さんがフレンド申請したことをおとログ1さんに通知する）
+INSERT INTO notifications (recipient_id, sender_id, notification_type, post_id, is_read, created_at) VALUES
+    ('AAA111BBB222', 'AAA111BBB223', '0', NULL, FALSE, TIMESTAMPADD(DAY,  -1, CURRENT_TIMESTAMP));

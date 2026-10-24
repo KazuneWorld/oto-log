@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.webapp.mapper.NotificationMapper">
+
+    <!-- 一覧用: notificationsに、送り主のニックネーム・アイコンを加えた結果の対応付け -->
+    <resultMap id="notificationResultMap" type="com.example.webapp.entity.Notification">
+        <id     property="notificationId"   column="notification_id"/>
+        <result property="recipientId"      column="recipient_id"/>
+        <result property="senderId"         column="sender_id"/>
+        <result property="notificationType" column="notification_type"/>
+        <result property="postId"           column="post_id"/>
+        <result property="read"             column="is_read"/>
+        <result property="createdAt"        column="created_at"/>
+        <result property="senderNickname"   column="sender_nickname"/>
+        <result property="senderIcon"       column="sender_icon"/>
+    </resultMap>
+
+    <!-- 通知を1件登録する。post_id が null の場合に備えて jdbcType を明示している -->
+    <insert id="insert" parameterType="com.example.webapp.entity.Notification">
+        INSERT INTO notifications
+            (recipient_id, sender_id, notification_type, post_id, is_read, created_at)
+        VALUES
+            (#{recipientId}, #{senderId}, #{notificationType}, #{postId,jdbcType=VARCHAR}, FALSE, CURRENT_TIMESTAMP)
+    </insert>
+
+    <!-- 同じ内容の未読通知の件数(投稿に紐づかない通知用) -->
+    <select id="countSameUnreadWithoutPost" resultType="int">
+        SELECT COUNT(*)
+          FROM notifications
+         WHERE recipient_id      = #{recipientId}
+           AND sender_id         = #{senderId}
+           AND notification_type = #{notificationType}
+           AND post_id IS NULL
+           AND is_read = FALSE
+    </select>
+
+    <!-- 同じ内容の未読通知の件数(投稿に紐づく通知用) -->
+    <select id="countSameUnreadWithPost" resultType="int">
+        SELECT COUNT(*)
+          FROM notifications
+         WHERE recipient_id      = #{recipientId}
+           AND sender_id         = #{senderId}
+           AND notification_type = #{notificationType}
+           AND post_id           = #{postId}
+           AND is_read = FALSE
+    </select>
+
+    <!-- 投稿の持ち主 -->
+    <select id="findPostOwnerId" resultType="string">
+        SELECT user_id
+          FROM posts
+         WHERE post_id = #{postId}
+    </select>
+
+    <!--
+        「この人(posterId)の投稿を通知してほしい」と設定しているフレンド。
+        friend_status = 1 は「フレンド状態」(0 は申請中)。
+          ・相手が申請した側(requester)の場合 → requester_notify_on_post を見る
+          ・相手が申請された側(receiver)の場合 → receiver_notify_on_post を見る
+    -->
+    <select id="findNotifyingFriendIds" resultType="string">
+        SELECT requester_id AS user_id
+          FROM friends
+         WHERE receiver_id = #{posterId}
+           AND friend_status = 1
+           AND requester_notify_on_post = TRUE
+        UNION ALL
+        SELECT receiver_id AS user_id
+          FROM friends
+         WHERE requester_id = #{posterId}
+           AND friend_status = 1
+           AND receiver_notify_on_post = TRUE
+    </select>
+
+    <!-- 通知一覧(新しい順)。IDは登録順に増えるので、IDの降順 = 新しい順 -->
+    <select id="findByRecipient" resultMap="notificationResultMap">
+        SELECT n.notification_id,
+               n.recipient_id,
+               n.sender_id,
+               n.notification_type,
+               n.post_id,
+               n.is_read,
+               n.created_at,
+               u.user_nickname AS sender_nickname,
+               u.user_icon     AS sender_icon
+          FROM notifications n
+          JOIN users u ON u.user_id = n.sender_id
+         WHERE n.recipient_id = #{recipientId}
+         ORDER BY n.notification_id DESC
+         LIMIT #{limit}
+    </select>
+
+    <!-- 未読件数 -->
+    <select id="countUnread" resultType="int">
+        SELECT COUNT(*)
+          FROM notifications
+         WHERE recipient_id = #{recipientId}
+           AND is_read = FALSE
+    </select>
+
+    <!-- 一覧を開いた時点までの未読通知を既読にする。それより新しい通知は既読にしない -->
+    <update id="markAsReadUpTo">
+        UPDATE notifications
+           SET is_read = TRUE
+         WHERE recipient_id = #{recipientId}
+           AND is_read = FALSE
+           AND notification_id &lt;= #{maxNotificationId}
+    </update>
+
+</mapper>
