@@ -72,7 +72,8 @@ CREATE TABLE friends (
     requester_id        VARCHAR(12)  NOT NULL,                -- 申請した側のuser_id
     receiver_id          VARCHAR(12)  NOT NULL,                -- 申請された側のuser_id
     friend_status        INT          NOT NULL DEFAULT 0,      -- 0=申請中, 1=フレンド状態(却下はレコード削除)
-    notify_on_post       BOOLEAN      NOT NULL DEFAULT FALSE,   -- このフレンドの投稿を通知するか
+    requester_notify_on_post  BOOLEAN  NOT NULL DEFAULT FALSE,  -- 申請した側(requester)が、相手(receiver)の投稿を通知してほしいか
+    receiver_notify_on_post   BOOLEAN  NOT NULL DEFAULT FALSE,  -- 申請された側(receiver)が、相手(requester)の投稿を通知してほしいか
 
     PRIMARY KEY (friend_relation_id),
     UNIQUE KEY uq_friends_pair (requester_id, receiver_id),

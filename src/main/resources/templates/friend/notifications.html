@@ -13,9 +13,35 @@
 <body>
     <!-- ヘッダー部分を読み込む -->
     <div th:replace="~{header :: header}"></div>
+ 
 
-
-
+ 
+        <!--/* 通知が1件もない場合 */-->
+        <p class="empty-message" th:if="${#lists.isEmpty(notifications)}">通知はまだありません。</p>
+ 
+        <!--/*
+            通知の一覧(新しい順)。行全体がリンクになっていて、タップすると通知の対象の画面へ移動する。
+            n.read は「この画面を開く前」の状態なので、false のものが未読(強調表示する)。
+            n.message / n.linkUrl は、通知の種類に応じた文言と遷移先(Notificationエンティティが組み立てる)。
+        */-->
+        <ul class="notification-list" th:unless="${#lists.isEmpty(notifications)}">
+            <li th:each="n : ${notifications}">
+                <a class="notification-item" th:classappend="${!n.read} ? 'unread'" th:href="@{${n.linkUrl}}">
+ 
+                    <!--/* 送り主のアイコン */-->
+                    <span class="avatar" aria-hidden="true">
+                        <img th:if="${n.senderIcon != null}" th:src="@{/images/usericons/${n.senderIcon}}" alt="">
+                    </span>
+ 
+                    <span class="notification-body">
+                        <span class="notification-message" th:text="${n.message}"></span>
+                        <span class="notification-time" th:text="${#temporals.format(n.createdAt, 'yyyy/MM/dd HH:mm')}"></span>
+                    </span>
+ 
+                </a>
+            </li>
+        </ul>
+ 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>
 </body>
