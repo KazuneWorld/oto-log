@@ -2,6 +2,7 @@ package com.example.webapp.push;
 
 import com.example.webapp.entity.NotificationType;
 import com.example.webapp.entity.NotificationContent;
+import com.example.webapp.entity.NotificationSender;
 import com.example.webapp.entity.PushSubscription;
 import com.example.webapp.mapper.NotificationMapper;
 import com.example.webapp.mapper.PushSubscriptionMapper;
@@ -51,7 +52,8 @@ public class PushNotificationService {
 
         // 通知の文言とリンク先は、アプリ内の通知一覧と同じ(NotificationType)
         NotificationType type = NotificationType.fromCode(event.notificationType());
-        String nickname = notificationMapper.findNicknameByUserId(event.senderId());
+        NotificationSender sender = notificationMapper.findSenderByUserId(event.senderId());
+        String nickname = sender == null ? null : sender.getNickname();
         NotificationContent content = event.postId() == null
                 ? null
                 : notificationMapper.findNotificationContent(event.postId(), event.senderId());
@@ -61,7 +63,10 @@ public class PushNotificationService {
                 : content.getReactionEmoji();
         String body = type.message(nickname != null ? nickname : "だれか", trackName, reactionEmoji);
         String url = type.linkUrl(event.senderId(), event.postId());
-        String payload = PushPayload.toJson(TITLE, body, url);
+        String icon = sender == null || sender.getIcon() == null || sender.getIcon().isBlank()
+                ? null
+                : "/images/usericons/" + sender.getIcon();
+        String payload = PushPayload.toJson(TITLE, body, url, icon);
 
         for (PushSubscription subscription : subscriptions) {
             sendTo(subscription, payload);

@@ -102,7 +102,7 @@ function safeUrl(url) {
 }
 
 // サーバーからプッシュを受信した時(アプリを閉じていても呼ばれる)。
-// 本文は PushPayload.toJson が作る {title, body, url} のJSON
+// 本文は PushPayload.toJson が作る {title, body, url, icon} のJSON
 self.addEventListener("push", function (event) {
     let data = {};
     try {
@@ -117,7 +117,7 @@ self.addEventListener("push", function (event) {
     event.waitUntil(
         self.registration.showNotification(data.title || "おとログ", {
             body: data.body || "新しい通知があります",
-            icon: "/images/pwa/icon-192.png",
+            icon: data.icon || "/images/pwa/icon-192.png",
             lang: "ja",
             data: { url: safeUrl(data.url) }
         })

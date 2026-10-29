@@ -16,11 +16,13 @@ public final class PushPayload {
      * @param title 通知のタイトル
      * @param body  通知の本文
      * @param url   通知をタップした時に開く、このサイト内のパス(例: /post/xxxx)
+     * @param icon  通知に表示するアイコンURL。nullの場合はService Worker側の既定アイコンを使う
      */
-    public static String toJson(String title, String body, String url) {
+    public static String toJson(String title, String body, String url, String icon) {
         return "{\"title\":" + quote(title)
                 + ",\"body\":" + quote(body)
-                + ",\"url\":" + quote(url) + "}";
+                + ",\"url\":" + quote(url)
+                + ",\"icon\":" + quote(icon) + "}";
     }
 
     static String quote(String s) {

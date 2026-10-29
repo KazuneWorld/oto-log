@@ -47,9 +47,11 @@
            AND is_read = FALSE
     </select>
 
-    <!-- user_id → ニックネーム(プッシュ通知の文言用) -->
-    <select id="findNicknameByUserId" resultType="string">
-        SELECT user_nickname
+    <!-- user_id → 通知元ユーザーのニックネーム・アイコン -->
+    <select id="findSenderByUserId"
+            resultType="com.example.webapp.entity.NotificationSender">
+        SELECT user_nickname AS nickname,
+               user_icon AS icon
           FROM users
          WHERE user_id = #{userId}
     </select>
