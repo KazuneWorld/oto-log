@@ -16,6 +16,20 @@
         WHERE song_id = #{songId}
     </select>
 
+    <!-- iTunesの曲IDで登録済みの曲情報を取得するSQL -->
+    <select id="findByTrackId" resultType="com.example.webapp.entity.Song">
+        SELECT
+            song_id          AS songId,
+            track_id         AS trackId,
+            track_name       AS trackName,
+            artist_name      AS artistName,
+            artwork_url      AS artworkUrl,
+            preview_url      AS previewUrl,
+            apple_music_url  AS appleMusicUrl
+        FROM songs
+        WHERE track_id = #{trackId}
+    </select>
+
     <!-- 音楽情報を登録するSQL（既に同じ曲があれば登録スキップ） -->
     <insert id="insertSong" parameterType="com.example.webapp.entity.Song" useGeneratedKeys="true" keyProperty="songId">
         INSERT IGNORE INTO songs
