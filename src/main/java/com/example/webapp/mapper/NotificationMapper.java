@@ -1,6 +1,7 @@
 package com.example.webapp.mapper;
 
 import com.example.webapp.entity.Notification;
+import com.example.webapp.entity.NotificationContent;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,6 +33,10 @@ public interface NotificationMapper {
 
     /** user_idからニックネームを取得する(存在しなければ null)。プッシュ通知の文言に使う */
     String findNicknameByUserId(@Param("userId") String userId);
+
+    /** 投稿IDから通知文に必要な楽曲名とリアクション絵文字を取得する */
+    NotificationContent findNotificationContent(@Param("postId") String postId,
+                                                @Param("userId") String userId);
 
     /** 投稿の持ち主のuser_idを取得する(存在しない投稿なら null) */
     String findPostOwnerId(@Param("postId") String postId);

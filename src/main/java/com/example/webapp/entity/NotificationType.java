@@ -10,16 +10,16 @@ package com.example.webapp.entity;
 public enum NotificationType {
 
     /** フレンド申請が届いた(リンク先: 承認画面) */
-    FRIEND_REQUEST(0, "さんからフレンド申請が届きました"),
+    FRIEND_REQUEST(0, " さんからフレンド申請が届きました"),
 
     /** 自分が送った申請が承認され、フレンドになった(リンク先: 相手のプロフィール) */
-    FRIEND_ACCEPTED(1, "さんとフレンドになりました"),
+    FRIEND_ACCEPTED(1, " さんとフレンドになりました"),
 
     /** 自分の投稿にリアクションが付いた(リンク先: その投稿) */
-    REACTION(2, "さんがあなたの投稿にリアクションしました"),
+    REACTION(2, " さんがあなたの投稿にリアクションしました"),
 
     /** 通知ONにしているフレンドが投稿した(リンク先: その投稿) */
-    FRIEND_POSTED(3, "さんが新しい曲を投稿しました");
+    FRIEND_POSTED(3, " さんが新しい曲を投稿しました");
 
     private final int code;
     private final String messageSuffix;
@@ -36,6 +36,26 @@ public enum NotificationType {
     /** 通知の文言(例: 「〇〇さんからフレンド申請が届きました」) */
     public String message(String senderNickname) {
         return senderNickname + messageSuffix;
+    }
+
+    /** 投稿情報を含む通知の文言 */
+    // 投稿名やリアクション絵文字が取得できなかった場合は、通常の文言にフォールバックする
+    public String message(String senderNickname, String trackName, String reactionEmoji) {
+        switch (this) {
+            case REACTION:
+                if (trackName == null || reactionEmoji == null) {
+                    return message(senderNickname);
+                }
+                return senderNickname + " さんがあなたの「" + trackName + "」に"
+                        + "リアクションしました: "+ reactionEmoji;
+            case FRIEND_POSTED:
+                if (trackName == null) {
+                    return message(senderNickname);
+                }
+                return senderNickname + " が「" + trackName + "」を投稿しました";
+            default:
+                return message(senderNickname);
+        }
     }
 
     /** 投稿に紐づく通知か(true の場合、notifications.post_id が必須になる) */

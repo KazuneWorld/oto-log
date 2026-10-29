@@ -1,6 +1,7 @@
 package com.example.webapp.push;
 
 import com.example.webapp.entity.NotificationType;
+import com.example.webapp.entity.NotificationContent;
 import com.example.webapp.entity.PushSubscription;
 import com.example.webapp.mapper.NotificationMapper;
 import com.example.webapp.mapper.PushSubscriptionMapper;
@@ -51,7 +52,14 @@ public class PushNotificationService {
         // 通知の文言とリンク先は、アプリ内の通知一覧と同じ(NotificationType)
         NotificationType type = NotificationType.fromCode(event.notificationType());
         String nickname = notificationMapper.findNicknameByUserId(event.senderId());
-        String body = type.message(nickname != null ? nickname : "だれか");
+        NotificationContent content = event.postId() == null
+                ? null
+                : notificationMapper.findNotificationContent(event.postId(), event.senderId());
+        String trackName = content == null ? null : content.getTrackName();
+        String reactionEmoji = content == null || type != NotificationType.REACTION
+                ? null
+                : content.getReactionEmoji();
+        String body = type.message(nickname != null ? nickname : "だれか", trackName, reactionEmoji);
         String url = type.linkUrl(event.senderId(), event.postId());
         String payload = PushPayload.toJson(TITLE, body, url);
 

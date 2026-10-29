@@ -13,6 +13,8 @@
         <result property="createdAt"        column="created_at"/>
         <result property="senderNickname"   column="sender_nickname"/>
         <result property="senderIcon"       column="sender_icon"/>
+        <result property="trackName"         column="track_name"/>
+        <result property="reactionEmoji"     column="reaction_emoji"/>
     </resultMap>
 
     <!-- 通知を1件登録する。post_id が null の場合に備えて jdbcType を明示している -->
@@ -52,6 +54,18 @@
          WHERE user_id = #{userId}
     </select>
 
+    <!-- 投稿IDから通知文に必要な楽曲名とリアクション絵文字を取得する -->
+    <select id="findNotificationContent"
+            resultType="com.example.webapp.entity.NotificationContent">
+        SELECT s.track_name AS trackName,
+               r.reaction_emoji AS reactionEmoji
+          FROM posts p
+          JOIN songs s ON s.song_id = p.song_id
+          LEFT JOIN reactions r ON r.post_id = p.post_id
+                               AND r.user_id = #{userId}
+         WHERE p.post_id = #{postId}
+    </select>
+
     <!-- 投稿の持ち主 -->
     <select id="findPostOwnerId" resultType="string">
         SELECT user_id
@@ -89,9 +103,14 @@
                n.is_read,
                n.created_at,
                u.user_nickname AS sender_nickname,
-               u.user_icon     AS sender_icon
+               u.user_icon     AS sender_icon,
+               s.track_name    AS track_name,
+               r.reaction_emoji AS reaction_emoji
           FROM notifications n
           JOIN users u ON u.user_id = n.sender_id
+          LEFT JOIN posts p ON p.post_id = n.post_id
+          LEFT JOIN songs s ON s.song_id = p.song_id
+          LEFT JOIN reactions r ON r.post_id = n.post_id AND r.user_id = n.sender_id
          WHERE n.recipient_id = #{recipientId}
          ORDER BY n.notification_id DESC
          LIMIT #{limit}
