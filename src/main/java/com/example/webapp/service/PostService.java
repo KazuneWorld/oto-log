@@ -23,6 +23,9 @@ public class PostService {
     @Autowired 
     private SongMapper songMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final SecureRandom random = new SecureRandom();
     private static final int POST_ID_LENGTH = 12;
@@ -38,6 +41,8 @@ public class PostService {
         //auto-incrementされたsongIdを設定してからDBに登録
         post.setSongId(song.getSongId());
         postMapper.insertPost(post);
+        // 新規投稿を通知オンのフレンドに通知する
+        notificationService.notifyFriendPosted(post.getPostId());
     }
 
     //指定した桁数のランダムな文字列を生成
