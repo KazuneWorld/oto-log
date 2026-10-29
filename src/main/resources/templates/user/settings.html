@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- PWA用の共通フラグメントを読み込む。 -->
     <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
+    <!-- CSRFトークンをmetaタグに埋め込む。 -->
+    <meta name="_csrf" th:content="${_csrf?.token}">
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}">
     <title>設定メニュー</title>
     <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
 </head>
@@ -16,6 +19,15 @@
 
     <h1>設定</h1>
     <a th:href="@{/settings/account}">ユーザー情報変更</a>
+
+    <!-- プッシュ通知機能を有効にするには端末ごとの設定が必要なので、
+        コメントアウトを解除するだけでは動かない。このページのCSSを作るタイミングになったら教えて -->
+    <!-- <section id="push-section" hidden>
+        <p>プッシュ通知</p>
+        <p id="push-status"></p>
+        <button type="button" id="push-enable-button" hidden>プッシュ通知をオンにする</button>
+        <button type="button" id="push-disable-button" hidden>プッシュ通知をオフにする</button>
+    </section> -->
 
     <!-- ⚠️余裕があれば実装・色は仮 -->
     <!-- カラーテーマにAppleMusic/Spotify/YouTube風とかあったら面白そう！ -->
@@ -31,5 +43,6 @@
 
     <!-- フッター部分を読み込む -->
     <div th:replace="~{footer :: footer}"></div>
+    <script th:src="@{/js/push-settings.js}"></script>
 </body>
 </html>

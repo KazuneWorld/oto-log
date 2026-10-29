@@ -3,6 +3,7 @@
 -- 外部キー制約があるため、参照されている側は後に消す
 -- 依存関係の深いテーブル → 浅いテーブルの順(CREATEの逆順)
 -- ============================================
+DROP TABLE IF EXISTS push_subscriptions;
 DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS bookmarks;
 DROP TABLE IF EXISTS reactions;
@@ -147,4 +148,20 @@ CREATE TABLE notifications (
     CONSTRAINT fk_notifications_recipient FOREIGN KEY (recipient_id) REFERENCES users (user_id),
     CONSTRAINT fk_notifications_sender    FOREIGN KEY (sender_id)    REFERENCES users (user_id),
     CONSTRAINT fk_notifications_post      FOREIGN KEY (post_id)      REFERENCES posts (post_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------
+-- push_subscriptions: プッシュ通知の購読情報(端末ごとの送り先)
+--   1人が複数の端末で購読できる。endpointは端末ごとにプッシュサービスが発行する、世界で一意なURL
+-- --------------------------------------------
+CREATE TABLE push_subscriptions (
+    push_subscription_id  INT           NOT NULL AUTO_INCREMENT,  -- PK, 内部管理用
+    user_id               VARCHAR(12)   NOT NULL,                  -- 通知を受け取るユーザー
+    endpoint              VARCHAR(500)  NOT NULL,                  -- 通知の送り先URL
+    p256dh                VARCHAR(100)  NOT NULL,                  -- 端末の公開鍵(base64url)
+    auth                  VARCHAR(50)   NOT NULL,                  -- 端末の認証用の秘密(base64url)
+ 
+    PRIMARY KEY (push_subscription_id),
+    UNIQUE KEY uq_push_subscriptions_endpoint (endpoint),
+    CONSTRAINT fk_push_subscriptions_user FOREIGN KEY (user_id) REFERENCES users (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -30,6 +30,9 @@ public interface NotificationMapper {
                                 @Param("notificationType") int notificationType,
                                 @Param("postId") String postId);
 
+    /** user_idからニックネームを取得する(存在しなければ null)。プッシュ通知の文言に使う */
+    String findNicknameByUserId(@Param("userId") String userId);
+
     /** 投稿の持ち主のuser_idを取得する(存在しない投稿なら null) */
     String findPostOwnerId(@Param("postId") String postId);
 

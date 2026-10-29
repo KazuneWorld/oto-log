@@ -45,6 +45,13 @@
            AND is_read = FALSE
     </select>
 
+    <!-- user_id → ニックネーム(プッシュ通知の文言用) -->
+    <select id="findNicknameByUserId" resultType="string">
+        SELECT user_nickname
+          FROM users
+         WHERE user_id = #{userId}
+    </select>
+
     <!-- 投稿の持ち主 -->
     <select id="findPostOwnerId" resultType="string">
         SELECT user_id
