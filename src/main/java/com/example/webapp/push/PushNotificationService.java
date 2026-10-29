@@ -61,12 +61,15 @@ public class PushNotificationService {
         String reactionEmoji = content == null || type != NotificationType.REACTION
                 ? null
                 : content.getReactionEmoji();
+        String artworkUrl = content == null || !type.isPostRelated()
+                ? null
+                : content.getArtworkUrl();
         String body = type.message(nickname != null ? nickname : "だれか", trackName, reactionEmoji);
         String url = type.linkUrl(event.senderId(), event.postId());
         String icon = sender == null || sender.getIcon() == null || sender.getIcon().isBlank()
                 ? null
                 : "/images/usericons/" + sender.getIcon();
-        String payload = PushPayload.toJson(TITLE, body, url, icon);
+        String payload = PushPayload.toJson(TITLE, body, url, icon, artworkUrl);
 
         for (PushSubscription subscription : subscriptions) {
             sendTo(subscription, payload);

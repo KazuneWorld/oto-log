@@ -9,4 +9,5 @@ public class NotificationContent {
 
     private String trackName;
     private String reactionEmoji;
+    private String artworkUrl;
 }

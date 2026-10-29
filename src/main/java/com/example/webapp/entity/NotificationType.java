@@ -52,7 +52,7 @@ public enum NotificationType {
                 if (trackName == null) {
                     return message(senderNickname);
                 }
-                return senderNickname + " が「" + trackName + "」を投稿しました";
+                return senderNickname + " さんが「" + trackName + "」を投稿しました";
             default:
                 return message(senderNickname);
         }

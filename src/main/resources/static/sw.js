@@ -13,7 +13,7 @@
 // オフライン対応を広げたくなったら、ここに戦略を足していく。
 
 // キャッシュの名前。offline.html の内容や、このファイルの取得ロジックを変えた時は、ここのバージョンを上げる
-const CACHE_NAME = "otolog-v2";
+const CACHE_NAME = "otolog-v4";
 const OFFLINE_URL = "/offline.html";
 
 // インストール時に、オフライン用ページをキャッシュしておく
@@ -102,7 +102,7 @@ function safeUrl(url) {
 }
 
 // サーバーからプッシュを受信した時(アプリを閉じていても呼ばれる)。
-// 本文は PushPayload.toJson が作る {title, body, url, icon} のJSON
+// 本文は PushPayload.toJson が作る {title, body, url, icon, image} のJSON
 self.addEventListener("push", function (event) {
     let data = {};
     try {
@@ -114,13 +114,18 @@ self.addEventListener("push", function (event) {
 
     // 受信したら、必ず通知を表示する。
     // (iPhoneなどは、プッシュを受信して通知を出さないと、購読を取り消されることがある)
+    const notificationOptions = {
+        body: data.body || "新しい通知があります",
+        icon: data.icon || "/images/pwa/icon-192.png",
+        lang: "ja",
+        data: { url: safeUrl(data.url) }
+    };
+    if (typeof data.image === "string" && data.image.trim()) {
+        notificationOptions.image = data.image;
+    }
+
     event.waitUntil(
-        self.registration.showNotification(data.title || "おとログ", {
-            body: data.body || "新しい通知があります",
-            icon: data.icon || "/images/pwa/icon-192.png",
-            lang: "ja",
-            data: { url: safeUrl(data.url) }
-        })
+        self.registration.showNotification(data.title || "おとログ", notificationOptions)
     );
 });
 

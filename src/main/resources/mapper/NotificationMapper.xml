@@ -60,7 +60,8 @@
     <select id="findNotificationContent"
             resultType="com.example.webapp.entity.NotificationContent">
         SELECT s.track_name AS trackName,
-               r.reaction_emoji AS reactionEmoji
+               r.reaction_emoji AS reactionEmoji,
+               s.artwork_url AS artworkUrl
           FROM posts p
           JOIN songs s ON s.song_id = p.song_id
           LEFT JOIN reactions r ON r.post_id = p.post_id
