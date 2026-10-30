@@ -71,4 +71,25 @@ public class UserService {
         } while (userMapper.existsByFriendCode(friendCode));
         return friendCode;
     }
+
+    // ログインIDまたはメールアドレスからユーザー情報を取得
+    public User findByLoginValue(String loginValue) {
+        return userMapper.findByLoginValue(loginValue);
+    }
+
+    // 内部ユーザーIDからユーザー情報を取得
+    public User findById(String userId) {   
+        return userMapper.findById(userId);
+    }
+
+    // ユーザー情報変更
+    public void update(User user, boolean changePassword) {
+        if (changePassword) {
+            user.setUserPass(passwordEncoder.encode(user.getUserPass()));
+        } else {
+            user.setUserPass(user.getUserPassHash());
+        }
+
+        userMapper.update(user);
+    }
 }

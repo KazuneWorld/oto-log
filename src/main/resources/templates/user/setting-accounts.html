@@ -7,38 +7,55 @@
     <!-- PWA用の共通フラグメントを読み込む。 -->
     <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     <title>アカウント設定</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+    <link rel="stylesheet" th:href="@{/css/user/setting-accounts.css}">
 </head>
 <body>
 
-    <!--機能実装担当者さんへ
-    
-        ・ニックネームを一番最初に移動させて。
-        ・その次に、ログイン用IDを変更するテキストボックスも必要。
-        ・現在のパスワードを入力させるテキストボックスも必要。
-
-        ※パスワード以外は現在設定中の値を表示させるようにしてね。
-    
-        終わったらこれ消してね
-    -->
+    <!-- ヘッダー部分を読み込む -->
+    <div th:replace="~{header :: header}"></div>
 
     <h1>ユーザー情報変更</h1>
+    <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></p>
+    <p>変更する情報のみ変更してください</p>
     <form th:action="@{/user/settings}" method="post">
-        <label for="email">メールアドレス:</label>
-        <input type="email" id="email" name="email" required>
-        <!-- th:value="${user.email}" required-->
-        <label for="password">パスワード:</label>
-        <input type="password" id="password" name="password" required>
-        <!-- th:value="${user.password}" required-->
-        <label for="password-confirm">パスワード（確認）</label>
-        <input type="password" id="password-confirm" name="password-confirm" required>
-        <label for="username">ニックネーム:</label>
-        <input type="text" id="username" name="username" required>
-        <!-- th:value="${user.username}" required-->
-        <button type="submit">変更</button>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <label for="username"><span class="required">＊</span>ニックネーム:</label>
+        <input type="text" id="username" name="username" 
+            th:value="${user.userNickname}" required>
+
+        <label for="loginid"><span class="required">＊</span>ログイン用ID:</label>
+        <input type="text" id="loginid" name="loginid" 
+            th:value="${user.userLoginId}" required>
+
+        <label for="email"><span class="required">＊</span>メールアドレス:</label>
+        <input type="email" id="email" name="email" 
+            th:value="${user.userEmail}" required>
+
+        <label for="password"><span class="required">＊</span>現在のパスワード:</label>
+        <input type="password" id="password" 
+            name="currentPassword" required>
+
+        <label for="password">新しいパスワード:</label>
+        <input type="password" id="newpassword" 
+            name="newPassword">
+
+        <label for="password-confirm">新しいパスワード（確認）:</label>
+        <input type="password" id="newpassword-confirm" 
+            name="password-confirm">
+        
+        <button type="submit" 
+            th:onclick="return confirm('変更しますか？');">変更</button>
+        <!--<button type="submit">変更</button>-->
+    </form>
+
+    <form th:action="@{/settings}" method="get">
+        <button type="submit">キャンセル</button>
     </form>
 
     <!-- ※パスワードの検証はjsではなくサーバー側で行う（unitradeと同じ）-->
+
+    <!-- フッター部分を読み込む -->
+    <div th:replace="~{footer :: footer}"></div>
      
 </body>
 </html>
