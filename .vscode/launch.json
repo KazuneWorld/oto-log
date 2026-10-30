@@ -39,6 +39,16 @@
             "projectName": "otolog",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-VapidKeyGenerator<otolog>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.webapp.push.VapidKeyGenerator",
+            "projectName": "otolog",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

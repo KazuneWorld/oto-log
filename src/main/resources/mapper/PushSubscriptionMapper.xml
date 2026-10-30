@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- プッシュ通知の購読情報のSQL -->
+<mapper namespace="com.example.webapp.mapper.PushSubscriptionMapper">
+
+    <resultMap id="pushSubscriptionResultMap" type="com.example.webapp.entity.PushSubscription">
+        <id     property="pushSubscriptionId" column="push_subscription_id"/>
+        <result property="userId"            column="user_id"/>
+        <result property="endpoint"          column="endpoint"/>
+        <result property="p256dh"            column="p256dh"/>
+        <result property="auth"              column="auth"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.example.webapp.entity.PushSubscription">
+        INSERT INTO push_subscriptions (user_id, endpoint, p256dh, auth)
+        VALUES (#{userId}, #{endpoint}, #{p256dh}, #{auth})
+    </insert>
+
+    <delete id="deleteByEndpoint">
+        DELETE FROM push_subscriptions
+         WHERE endpoint = #{endpoint}
+    </delete>
+
+    <delete id="deleteByEndpointAndUserId">
+        DELETE FROM push_subscriptions
+         WHERE endpoint = #{endpoint}
+           AND user_id  = #{userId}
+    </delete>
+
+    <select id="findByEndpoint" resultMap="pushSubscriptionResultMap">
+        SELECT push_subscription_id, user_id, endpoint, p256dh, auth
+          FROM push_subscriptions
+         WHERE endpoint = #{endpoint}
+    </select>
+
+    <select id="findByUserId" resultMap="pushSubscriptionResultMap">
+        SELECT push_subscription_id, user_id, endpoint, p256dh, auth
+          FROM push_subscriptions
+         WHERE user_id = #{userId}
+         ORDER BY push_subscription_id
+    </select>
+
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*)
+          FROM push_subscriptions
+         WHERE user_id = #{userId}
+    </select>
+
+</mapper>

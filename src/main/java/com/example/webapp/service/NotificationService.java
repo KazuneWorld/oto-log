@@ -3,6 +3,7 @@ package com.example.webapp.service;
 import com.example.webapp.entity.Notification;
 import com.example.webapp.entity.NotificationType;
 import com.example.webapp.mapper.NotificationMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,10 @@ import java.util.List;
  *  ・同じ内容の未読通知がすでにある場合は、重複して作らない
  *    (例: リアクションの絵文字を何度も押し直しても、通知は1件のまま)
  *
+ * 通知を登録すると NotificationCreatedEvent を発行する。プッシュ通知は、このイベントを
+ * 受け取って送られる(この Service は、プッシュ通知のことを知らなくてよい)。
+ * 自分宛て・重複で登録されなかった場合は、イベントも発行されない(プッシュも送られない)。
+ *
  * クラス全体に @Transactional を付けているので、呼び出し元がトランザクション中なら
  * その一部として動く(例: フレンド申請の登録と通知の登録が、片方だけ成功することはない)。
  */
@@ -31,9 +36,11 @@ public class NotificationService {
     private static final int LIST_LIMIT = 30;
 
     private final NotificationMapper notificationMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public NotificationService(NotificationMapper notificationMapper) {
+    public NotificationService(NotificationMapper notificationMapper, ApplicationEventPublisher eventPublisher) {
         this.notificationMapper = notificationMapper;
+        this.eventPublisher = eventPublisher;
     }
 
     // ============================================
@@ -125,5 +132,9 @@ public class NotificationService {
         notification.setNotificationType(type.getCode());
         notification.setPostId(postId);
         notificationMapper.insert(notification);
+
+        // 通知を登録したことを知らせる(プッシュ通知を送る処理などが受け取る)。
+        // 実際に受け取る処理は、この処理のトランザクションがコミットされた後に実行される
+        eventPublisher.publishEvent(new NotificationCreatedEvent(recipientId, senderId, type.getCode(), postId));
     }
 }
