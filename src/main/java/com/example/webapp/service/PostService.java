@@ -38,8 +38,12 @@ public class PostService {
         post.setUserId(userId);
         post.setPostId(postId);
         songMapper.insertSong(song);
-        //auto-incrementされたsongIdを設定してからDBに登録
-        post.setSongId(song.getSongId());
+        // 新規登録時と重複時のどちらでも、DB上のsong_idを設定してから投稿する
+        Song savedSong = songMapper.findByTrackId(song.getTrackId());
+        if (savedSong == null) {
+            throw new IllegalStateException("投稿対象の楽曲を登録できませんでした。");
+        }
+        post.setSongId(savedSong.getSongId());
         postMapper.insertPost(post);
         // 新規投稿を通知オンのフレンドに通知する
         notificationService.notifyFriendPosted(post.getPostId());

@@ -22,12 +22,14 @@ public class Notification {
     // 以下は一覧表示用(usersテーブルをJOINして取得する)
     private String senderNickname;
     private String senderIcon;
+    private String trackName;
+    private String reactionEmoji;
 
     // ---- テンプレート(Thymeleaf)から ${n.message} ${n.linkUrl} で使えるようにしている ----
 
     /** 通知の文言(例: 「〇〇さんからフレンド申請が届きました」) */
     public String getMessage() {
-        return NotificationType.fromCode(notificationType).message(senderNickname);
+        return NotificationType.fromCode(notificationType).message(senderNickname, trackName, reactionEmoji);
     }
 
     /** 通知をタップした時の遷移先URL */

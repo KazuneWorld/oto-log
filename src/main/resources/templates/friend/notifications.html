@@ -28,9 +28,9 @@
             <li th:each="n : ${notifications}">
                 <a class="notification-item" th:classappend="${!n.read} ? 'unread'" th:href="@{${n.linkUrl}}">
  
-                    <!--/* 送り主のアイコン */-->
+                    <!--/* 送り主のアイコン。NULLの場合はデフォルトアイコンにフォールバック */-->
                     <span class="avatar" aria-hidden="true">
-                        <img th:if="${n.senderIcon != null}" th:src="@{/images/usericons/${n.senderIcon}}" alt="">
+                        <img th:src="${n.senderIcon != null} ? @{|/images/usericons/${n.senderIcon}|} : @{/images/defaulticon.png}" alt="ユーザーアイコン" style="width: 40px; height: 40px;">
                     </span>
  
                     <span class="notification-body">
