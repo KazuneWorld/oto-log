@@ -6,6 +6,12 @@
             <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     -->
     <th:block th:fragment="pwaHead">
+        <!-- スマートフォンのノッチやホームインジケーターまで表示領域を広げる -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+        <!-- 全画面共通の基礎スタイル -->
+        <link rel="stylesheet" th:href="@{/css/common.css}">
+
         <!-- Webアプリマニフェスト(アプリ名・アイコン・起動URLなどの定義) -->
         <link rel="manifest" th:href="@{/manifest.json}">
 

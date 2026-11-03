@@ -2,8 +2,6 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <!-- ビューポートの設定。スマホでの表示に必要 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- PWA用の共通フラグメントを読み込む。 -->
     <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     <!-- CSRFトークンをmetaタグに埋め込む。 -->
@@ -21,7 +19,8 @@
     <a th:href="@{/settings/account}">ユーザー情報変更</a>
 
     <!-- プッシュ通知機能を有効にするには端末ごとの設定が必要なので、
-        コメントアウトを解除するだけでは動かない。このページのCSSを作るタイミングになったら教えて -->
+        コメントアウトを解除するだけでは動かない。基本的にはAWSデプロイ時になったら実装する予定。
+        🔶このページのCSSを作るタイミングになったら教えて -->
     <!-- <section id="push-section" hidden>
         <p>プッシュ通知</p>
         <p id="push-status"></p>
