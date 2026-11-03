@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <!-- PWA用の共通フラグメントを読み込む。 -->
     <th:block th:replace="~{pwa-head :: pwaHead}"></th:block>
     <title>ログイン</title>
-    <!-- <link rel="stylesheet" th:href="@{/css/.css}"> -->
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 
-<body>
-    <h1>ログインページ</h1>
+<body class="login-page">
 
-    <!-- ログイン失敗時のエラーメッセージ -->
-    <p th:if="${param.error}" style="color: red;">
+    <!-- ロゴ等の表示エリア（現在は仮のグレー） -->
+    <div class="login-logo"></div>
+
+    <!-- ⚠️Figmaのデザインにない（ログイン失敗時のエラーメッセージ） -->
+    <p class="login-error" th:if="${param.error}">
         メールアドレス（またはログインID）かパスワードが正しくありません。
     </p>
 
     <!-- 開発中のログイン省略のためvalueにユーザーをセットしています -->
-    <form th:action="@{/user/login}" method="post">
+    <form class="login-form" th:action="@{/user/login}" method="post">
 
-        <label for="userEmail">メールアドレスまたはログインID</label>
-        <input type="text" id="userEmail" name="userEmail" value="example1@example.com" required>
+        <input class="login-input" type="text" id="userEmail" name="userEmail" value="example1@example.com"
+            placeholder="メールアドレス or ログインID" required>
 
-        <label for="password">パスワード</label>
-        <input type="password" id="password" name="password" value="1234" required>
+        <input class="login-input" type="password" id="password" name="password" value="1234" placeholder="パスワード"
+            required>
 
-        <button type="submit">ログイン</button>
-        
+        <button class="login-button" type="submit">ログイン</button>
+
     </form>
-    
+
+    <hr class="login-divider">
+
+    <p class="login-register">
+        会員登録は<a class="login-register__link" th:href="@{/user/signup}">こちら</a>
+    </p>
 </body>
 
 </html>
